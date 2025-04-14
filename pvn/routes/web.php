@@ -47,3 +47,6 @@ Route::get('/register',function(){
     return view('register');
 }); 
 
+Route::get('/quiz',function(){
+    return view('quiz');
+}); 
