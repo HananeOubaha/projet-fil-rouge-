@@ -70,7 +70,8 @@
                 <p class="mt-2 text-gray-600">Rejoignez la communauté PVN</p>
             </div>
 
-            <form class="mt-8 space-y-6" action="#" method="POST">
+            <form class="mt-8 space-y-6" action="{{ route('register') }}" method="POST">
+                @csrf
                 <div class="rounded-md shadow-sm space-y-4">
                     <div>
                         <label for="role" class="block text-sm font-medium text-gray-700">Je souhaite m'inscrire en tant que</label>
@@ -84,19 +85,30 @@
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">Nom complet</label>
                         <input id="name" name="name" type="text" required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green @error('name') border-red-500 @enderror"
+                            value="{{ old('name') }}">
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Adresse email</label>
                         <input id="email" name="email" type="email" required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green @error('email') border-red-500 @enderror"
+                            value="{{ old('email') }}">
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
                         <input id="password" name="password" type="password" required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green @error('password') border-red-500 @enderror">
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
@@ -105,7 +117,7 @@
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
                     </div>
 
-                    <div id="psychologue-fields" class="hidden space-y-4">
+                    <!-- <div id="psychologue-fields" class="hidden space-y-4">
                         <div>
                             <label for="license" class="block text-sm font-medium text-gray-700">Numéro de licence professionnelle</label>
                             <input id="license" name="license" type="text" 
@@ -116,7 +128,7 @@
                             <input id="specialization" name="specialization" type="text" 
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="flex items-center">
@@ -137,7 +149,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Déjà inscrit ?
-                    <a href="login.html" class="font-medium text-pvn-green hover:text-pvn-dark-green">
+                    <a href="{{ route('login') }}" class="font-medium text-pvn-green hover:text-pvn-dark-green">
                         Connectez-vous
                     </a>
                 </p>

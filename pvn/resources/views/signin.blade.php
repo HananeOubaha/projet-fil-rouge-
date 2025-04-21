@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>PVN - Connexion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -27,18 +28,18 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
+                    <a href="{{ url('/') }}" class="flex items-center">
                         <i class="fas fa-heart text-pvn-green text-2xl mr-2"></i>
                         <span class="text-pvn-dark-green font-semibold text-xl">PVN</span>
                     </a>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="index.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Accueil</a>
-                    <a href="resources.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
-                    <a href="about.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">À propos</a>
-                    <a href="login.html" class="bg-pvn-green text-white hover:bg-pvn-dark-green px-4 py-2 rounded-md text-sm font-medium">Connexion</a>
-                    <a href="register.html" class="bg-pvn-dark-green text-white hover:bg-pvn-green px-4 py-2 rounded-md text-sm font-medium">Inscription</a>
+                    <a href="{{ url('/index') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Accueil</a>
+                    <a href="{{ url('/ressource') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
+                    <a href="{{ url('/about') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">À propos</a>
+                    <a href="{{ route('login') }}" class="bg-pvn-green text-white hover:bg-pvn-dark-green px-4 py-2 rounded-md text-sm font-medium">Connexion</a>
+                    <a href="{{ route('register') }}" class="bg-pvn-dark-green text-white hover:bg-pvn-green px-4 py-2 rounded-md text-sm font-medium">Inscription</a>
                 </div>
 
                 <div class="md:hidden">
@@ -52,11 +53,11 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Accueil</a>
-                <a href="resources.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
-                <a href="about.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">À propos</a>
-                <a href="login.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Connexion</a>
-                <a href="register.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Inscription</a>
+                <a href="{{ url('/index') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Accueil</a>
+                <a href="{{ url('/ressource') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
+                <a href="{{ url('/about') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">À propos</a>
+                <a href="{{ route('login') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Connexion</a>
+                <a href="{{ route('register') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Inscription</a>
             </div>
         </div>
     </nav>
@@ -70,25 +71,39 @@
                 <p class="mt-2 text-gray-600">Bienvenue sur Positive Vibes Network</p>
             </div>
 
-            <form class="mt-8 space-y-6" action="#" method="POST">
+            @if(session('success'))
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST">
+                @csrf
                 <div class="rounded-md shadow-sm space-y-4">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Adresse email</label>
                         <input id="email" name="email" type="email" required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green @error('email') border-red-500 @enderror"
+                            value="{{ old('email') }}">
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
                         <input id="password" name="password" type="password" required 
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green @error('password') border-red-500 @enderror">
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <input id="remember-me" name="remember-me" type="checkbox" 
+                        <input id="remember" name="remember" type="checkbox" 
                             class="h-4 w-4 text-pvn-green focus:ring-pvn-green border-gray-300 rounded">
-                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                        <label for="remember" class="ml-2 block text-sm text-gray-700">
                             Se souvenir de moi
                         </label>
                     </div>
@@ -110,7 +125,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Pas encore de compte ?
-                    <a href="register.html" class="font-medium text-pvn-green hover:text-pvn-dark-green">
+                    <a href="{{ route('register') }}" class="font-medium text-pvn-green hover:text-pvn-dark-green">
                         Inscrivez-vous
                     </a>
                 </p>
