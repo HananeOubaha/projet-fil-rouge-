@@ -7,22 +7,22 @@ use App\Http\Controllers\DashboardController;
 
 // Routes publiques
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('index');
+})->name('index');
 
 Route::get('/about', function () {
     return view('about');
-});
+})->name('about');
 
 Route::get('/ressource', function () {
     return view('ressource');
-});
+})->name('ressource');
 
-Route::get('/index', function() {
-    return view('index');
-});
+// Route::get('/index', function() {
+//     return view('index');
+// });
 
-Route::get('/signin', function() {
+Route::get('/login', function() {
     return view('signin');
 });
 
@@ -36,14 +36,20 @@ Route::get('/AnonymousForm', function() {
 
 Route::get('/message', function() {
     return view('message');
-}); 
+});
+// route pour booking
+Route::get('/booking' ,function(){
+    return view('booking.psychologists');
+});
 
-// Routes d'authentification
-Route::middleware(['web'])->group(function () {
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+// // Routes d'authentification
+// Route::middleware(['web'])->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
+    
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Routes des tableaux de bord (protégées)
@@ -52,4 +58,4 @@ Route::middleware(['web'])->group(function () {
         Route::get('/dashboardPsy', [DashboardController::class, 'dashboardPsy'])->name('dashboardPsy');
         Route::get('/dashboardUser', [DashboardController::class, 'dashboardUser'])->name('dashboardUser');
     });
-}); 
+

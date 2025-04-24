@@ -28,16 +28,16 @@ pvn-green': '#7C9A92',
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
+                    <a href="/" class="flex items-center">
                         <i class="fas fa-heart text-pvn-green text-2xl mr-2"></i>
                         <span class="text-pvn-dark-green font-semibold text-xl">PVN</span>
                     </a>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="dashboard-user.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
-                    <a href="resources.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
-                    <a href="anonymous-forum.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Forum Anonyme</a>
+                    <a href="/dashboard-user" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
+                    <a href="/ressource" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
+                    <a href="/anonymous-forum" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Forum Anonyme</a>
                     <div class="relative">
                         <button id="user-menu-button" class="flex items-center text-pvn-dark-green hover:text-pvn-green">
                             <i class="fas fa-user-circle text-2xl"></i>
@@ -57,9 +57,9 @@ pvn-green': '#7C9A92',
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="dashboard-user.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Tableau de bord</a>
-                <a href="resources.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
-                <a href="anonymous-forum.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Forum Anonyme</a>
+                <a href="/dashboard-user" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Tableau de bord</a>
+                <a href="/ressource" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
+                <a href="/anonymous-forum" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Forum Anonyme</a>
             </div>
         </div>
     </nav>
