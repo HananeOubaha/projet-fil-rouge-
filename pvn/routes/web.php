@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PsychologistAppointmentController;
+use App\Http\Controllers\ResourceController;
 use App\Http\Middleware\CheckRole;
 
 // Routes publiques
@@ -21,9 +22,16 @@ Route::get('/ressource', function () {
     return view('ressource');
 })->name('ressource');
 
-// Route::get('/index', function() {
-//     return view('index');
-// });
+
+Route::get('/ressource/psy' , [ResourceController::class , 'index']);
+Route::get('/ressource/create' , function(){
+    return view('psychologist.resources.create');
+});
+Route::post('/ressource/create' , [ResourceController::class , 'store'])->name('psychologist.resources.index');
+
+Route::get('/test', function () {
+    return view('psychologist.resources.index');
+})->name('ressource');
 
 Route::get('/login', function() {
     return view('signin');
@@ -74,4 +82,16 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
         Route::get('/psychologist/appointments', [PsychologistAppointmentController::class, 'index'])->name('psychologist.appointments.index');
         Route::get('/psychologist/appointments/{appointment}', [PsychologistAppointmentController::class, 'show'])->name('psychologist.appointments.show');
         Route::put('/psychologist/appointments/{appointment}/status', [PsychologistAppointmentController::class, 'updateStatus'])->name('psychologist.appointments.updateStatus');
+    // });
+
+    // Routes pour les ressources des psychologues
+    // Route::middleware(['auth', CheckRole::class.':psychologist'])->group(function () {
+    //     Route::resource('psychologist/resources', ResourceController::class)->names([
+    //         'index' => 'psychologist.resources.index',
+    //         'create' => 'psychologist.resources.create',
+    //         'store' => 'psychologist.resources.store',
+    //         'edit' => 'psychologist.resources.edit',
+    //         'update' => 'psychologist.resources.update',
+    //         'destroy' => 'psychologist.resources.destroy',
+    //     ]);
     // });
