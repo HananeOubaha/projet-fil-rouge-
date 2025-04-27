@@ -18,9 +18,8 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
-Route::get('/ressource', function () {
-    return view('ressource');
-})->name('ressource');
+Route::get('/ressource', [ResourceController::class , 'index1']
+)->name('ressource');
 
 
 Route::get('/ressource/psy' , [ResourceController::class , 'index']);
@@ -29,9 +28,7 @@ Route::get('/ressource/create' , function(){
 });
 Route::post('/ressource/create' , [ResourceController::class , 'store'])->name('psychologist.resources.index');
 
-Route::get('/test', function () {
-    return view('psychologist.resources.index');
-})->name('ressource');
+
 
 Route::get('/login', function() {
     return view('signin');

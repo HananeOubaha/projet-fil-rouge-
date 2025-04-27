@@ -17,6 +17,14 @@ class ResourceController extends Controller
 
         return view('psychologist.resources.index', compact('resources'));
     }
+    public function index1()
+{
+    
+    $resources = Resource::all(); 
+    
+    return view('ressource', compact('resources'));
+}
+
 
     public function create()
     {
