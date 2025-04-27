@@ -28,25 +28,28 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="dashboard-user.html" class="flex items-center">
+                    <a href="{{ route('dashboardUser') }}" class="flex items-center">
                         <i class="fas fa-heart text-pvn-green text-2xl mr-2"></i>
                         <span class="text-pvn-dark-green font-semibold text-xl">PVN</span>
                     </a>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="dashboard-user.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
-                    <a href="user-appointments.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Rendez-vous</a>
-                    <a href="user-resources.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
-                    <a href="user-messages.html" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Messages</a>
-                    <div class="relative">
+                    <a href="{{ route('dashboardUser') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
+                    <a href="{{ route('appointments.index') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Rendez-vous</a>
+                    <a href="{{ route('ressource') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
+                    <a href="{{ route('message') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Messages</a>
+                    <a href="{{ route('appointments.create') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
+                        <i class="fas fa-calendar-plus mr-2"></i>Réserver
+                    </a>
+                    <!-- <div class="relative">
                         <button id="user-menu-button" class="flex items-center text-pvn-dark-green hover:text-pvn-green">
                             <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                                 alt="Photo de profil" 
                                 class="h-8 w-8 rounded-full">
                             <span class="ml-2">Jean Dupont</span>
                         </button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="md:hidden">
@@ -60,11 +63,14 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="dashboard-user.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Tableau de bord</a>
-                <a href="user-appointments.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Rendez-vous</a>
-                <a href="user-resources.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
-                <a href="user-messages.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Messages</a>
-                <a href="user-profile.html" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Profil</a>
+                <a href="{{ route('dashboardUser') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Tableau de bord</a>
+                <a href="{{ route('appointments.index') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Rendez-vous</a>
+                <a href="{{ route('ressource') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
+                <a href="{{ route('message') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Messages</a>
+                <a href="{{ route('appointments.create') }}" class="block bg-pvn-green text-white px-4 py-2 rounded-md text-center">
+                    <i class="fas fa-calendar-plus mr-2"></i>Réserver
+                </a>
+                <a href="#" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Profil</a>
             </div>
         </div>
     </nav>
@@ -78,9 +84,14 @@
                     <h1 class="text-2xl font-bold text-pvn-dark-green">Bonjour, Jean 👋</h1>
                     <p class="text-gray-600">Ravi de vous revoir ! Comment allez-vous aujourd'hui ?</p>
                 </div>
-                <button class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
-                    Commencer un quiz bien-être
-                </button>
+                <div class="flex space-x-4">
+                    <a href="{{ route('appointments.create') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
+                        <i class="fas fa-calendar-plus mr-2"></i>Prendre rendez-vous
+                    </a>
+                    <a href="{{ route('quiz') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
+                        <i class="fas fa-clipboard-list mr-2"></i>Commencer un quiz bien-être
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -96,9 +107,14 @@
                     <p class="text-gray-600">Dr. Marie Lambert</p>
                     <p class="text-gray-800 font-semibold">Mercredi, 15 Mars 2025</p>
                     <p class="text-gray-600">14:30 - 15:30</p>
-                    <button class="mt-4 text-pvn-green hover:text-pvn-dark-green font-medium">
-                        Voir tous les rendez-vous →
-                    </button>
+                    <div class="mt-4 space-y-2">
+                        <a href="{{ route('appointments.index') }}" class="text-pvn-green hover:text-pvn-dark-green font-medium inline-block">
+                            Voir tous les rendez-vous →
+                        </a>
+                        <a href="{{ route('appointments.create') }}" class="block bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green text-center">
+                            Nouveau rendez-vous
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -108,7 +124,7 @@
                     <h2 class="text-xl font-semibold text-pvn-dark-green">Votre humeur</h2>
                     <i class="fas fa-smile text-pvn-green text-xl"></i>
                 </div>
-                <!-- <canvas id="moodChart" class="w-full h-32"></canvas> -->
+                <canvas id="moodChart" class="w-full h-32"></canvas>
                 <button class="mt-4 text-pvn-green hover:text-pvn-dark-green font-medium">
                     Voir l'historique complet →
                 </button>
@@ -130,9 +146,9 @@
                             <p class="text-sm text-gray-600">À propos de votre dernier...</p>
                         </div>
                     </div>
-                    <button class="text-pvn-green hover:text-pvn-dark-green font-medium">
+                    <a href="{{ route('message') }}" class="text-pvn-green hover:text-pvn-dark-green font-medium">
                         Voir tous les messages →
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -166,9 +182,9 @@
                         </div>
                     </div>
                 </div>
-                <button class="mt-6 text-pvn-green hover:text-pvn-dark-green font-medium">
+                <a href="{{ route('ressource') }}" class="mt-6 text-pvn-green hover:text-pvn-dark-green font-medium">
                     Voir toutes les ressources →
-                </button>
+                </a>
             </div>
 
             <!-- Activités récentes -->
@@ -217,19 +233,19 @@
         });
 
         // Mood Chart
-        const ctx = document.getElementById('moodChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-                datasets: [{
-                    label: 'Niveau d\'humeur',
-                    data: [7, 6, 8, 7, 8, 9, 8],
-                    borderColor: '#7C9A92',
-                    tension: 0.4,
-                    fill: false
-                }]
-            },
+        // const ctx = document.getElementById('moodChart').getContext('2d');
+        // new Chart(ctx, {
+        //     type: 'line',
+        //     data: {
+        //         labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+        //         datasets: [{
+        //             label: 'Niveau d\'humeur',
+        //             data: [7, 6, 8, 7, 8, 9, 8],
+        //             borderColor: '#7C9A92',
+        //             tension: 0.4,
+        //             fill: false
+        //         }]
+            // },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
