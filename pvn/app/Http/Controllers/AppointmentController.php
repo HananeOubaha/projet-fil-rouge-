@@ -36,26 +36,16 @@ class AppointmentController extends Controller
             'notes' => 'nullable|string|max:500',
         ]);
 
-     
+        $appointment = new Appointment();
+        $appointment->patient_id = Auth::id();
+        $appointment->doctor_id = $request->psychologist_id;
+        $appointment->appointment_date = $request->appointment_date;
+        $appointment->notes = $request->notes;
+        $appointment->status = 'pending';
+        $appointment->save();
 
-        $datetime = $request->appointment_date; // Exemple : '2025-04-25T15:30'
-
-$appointment = new Appointment();
-$appointment->patient_id = Auth::id();
-$appointment->doctor_id = $request->psychologist_id;
-$appointment->appointment_date = $datetime; // Tu peux garder la valeur complète ici si tu veux.
-
-$appointment->appointment_time = \Carbon\Carbon::parse($datetime)->format('H:i'); // Résultat : '15:30'
-
-$appointment->notes = $request->notes;
-$appointment->status = 'pending';
-$appointment->save();
-
-
-return redirect()->route('appointments.show', $appointment)
-->with('success', 'Rendez-vous créé avec succès !');
-
-        
+        return redirect()->route('appointments.show', $appointment)
+            ->with('success', 'Rendez-vous créé avec succès !');
     }
 
     public function show(Appointment $appointment)
@@ -66,7 +56,11 @@ return redirect()->route('appointments.show', $appointment)
 
     public function cancel(Appointment $appointment)
     {
-        $this->authorize('update', $appointment);
+        // Vérifier si l'utilisateur connecté est le patient du rendez-vous
+        if ($appointment->patient_id !== Auth::id()) {
+            return redirect()->route('appointments.index')
+                ->with('error', 'Vous n\'êtes pas autorisé à annuler ce rendez-vous.');
+        }
         
         $appointment->status = 'cancelled';
         $appointment->save();

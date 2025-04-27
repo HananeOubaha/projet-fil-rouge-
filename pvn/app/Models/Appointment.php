@@ -11,7 +11,7 @@ class Appointment extends Model
 
     protected $fillable = [
         'patient_id',
-        'psychologist_id',
+        'doctor_id',
         'appointment_date',
         'notes',
         'status'
@@ -28,6 +28,6 @@ class Appointment extends Model
 
     public function psychologist()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'doctor_id');
     }
 } 

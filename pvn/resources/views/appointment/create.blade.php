@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.navAuth')
 
 @section('content')
 <div class="max-w-3xl mx-auto p-6">

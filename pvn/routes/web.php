@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\PsychologistAppointmentController;
+use App\Http\Middleware\CheckRole;
 
 // Routes publiques
 Route::get('/', function () {
@@ -66,3 +68,10 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
         Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
         Route::patch('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
     });
+
+    // Routes pour les rendez-vous des psychologues
+    // Route::middleware(['auth', CheckRole::class.':psychologist'])->group(function () {
+        Route::get('/psychologist/appointments', [PsychologistAppointmentController::class, 'index'])->name('psychologist.appointments.index');
+        Route::get('/psychologist/appointments/{appointment}', [PsychologistAppointmentController::class, 'show'])->name('psychologist.appointments.show');
+        Route::put('/psychologist/appointments/{appointment}/status', [PsychologistAppointmentController::class, 'updateStatus'])->name('psychologist.appointments.updateStatus');
+    // });

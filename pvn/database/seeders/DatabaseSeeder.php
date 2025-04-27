@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Appointment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,9 +16,29 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Créer un psychologue
+        $psychologist = User::create([
+            'name' => 'Dr. Smith',
+            'email' => 'smith@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'psychologue'
+        ]);
+
+        // Créer un patient
+        $patient = User::create([
+            'name' => 'John Doe',
+            'email' => 'patient@example.com',
+            'password' => bcrypt('password'),
+            'role' => 'patient'
+        ]);
+
+        // Créer un rendez-vous
+        Appointment::create([
+            'patient_id' => $patient->id,
+            'doctor_id' => $psychologist->id,
+            'appointment_date' => now()->addDays(7),
+            'notes' => 'Première consultation',
+            'status' => 'pending'
         ]);
     }
 }

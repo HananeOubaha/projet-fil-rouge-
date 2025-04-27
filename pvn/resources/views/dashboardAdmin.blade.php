@@ -46,27 +46,27 @@
                     <span class="ml-2 text-xl font-semibold text-pvn-green-500">PVN</span>
                 </a>
                 <nav class="space-y-2">
-                    <a href="/dashboard/index.html" class="flex items-center px-4 py-2 text-gray-700 bg-pvn-green-50 rounded-lg">
+                    <a href="/dashboard/index" class="flex items-center px-4 py-2 text-gray-700 bg-pvn-green-50 rounded-lg">
                         <i class="fas fa-home mr-3"></i>
                         <span>Tableau de bord</span>
                     </a>
-                    <a href="/dashboard/profile.html" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
+                    <a href="/dashboard/profile" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
                         <i class="fas fa-user mr-3"></i>
                         <span>Profil</span>
                     </a>
-                    <a href="/dashboard/appointments.html" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
+                    <a href="/dashboard/appointments" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
                         <i class="fas fa-calendar mr-3"></i>
                         <span>Rendez-vous</span>
                     </a>
-                    <a href="/dashboard/resources.html" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
+                    <a href="/dashboard/resources" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
                         <i class="fas fa-book mr-3"></i>
                         <span>Mes ressources</span>
                     </a>
-                    <a href="/dashboard/journal.html" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
+                    <a href="/dashboard/journal" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
                         <i class="fas fa-pen mr-3"></i>
                         <span>Journal</span>
                     </a>
-                    <a href="/dashboard/messages.html" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
+                    <a href="/dashboard/messages" class="flex items-center px-4 py-2 text-gray-600 hover:bg-pvn-green-50 rounded-lg">
                         <i class="fas fa-envelope mr-3"></i>
                         <span>Messages</span>
                     </a>

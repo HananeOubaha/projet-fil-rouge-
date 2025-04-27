@@ -117,7 +117,7 @@
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
                     </div>
 
-                    <div id="psychologue-fields" class="hidden space-y-4">
+                    <!-- <div id="psychologue-fields" class="hidden space-y-4">
                         <div>
                             <label for="license" class="block text-sm font-medium text-gray-700">Numéro de licence professionnelle</label>
                             <input id="license" name="license" type="text" 
@@ -128,7 +128,7 @@
                             <input id="specialization" name="specialization" type="text" 
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pvn-green focus:border-pvn-green">
                         </div>
-                    </div> 
+                    </div>  -->
                 </div>
 
                 <div class="flex items-center">

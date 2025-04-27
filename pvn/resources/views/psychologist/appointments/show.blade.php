@@ -5,17 +5,24 @@
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             <h2 class="text-2xl font-semibold text-gray-800">Détails du Rendez-vous</h2>
-            <a href="{{ route('appointments.index') }}"
-                class="inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+            <a href="{{ route('psychologist.appointments.index') }}"
+               class="inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                 Retour
             </a>
         </div>
 
         <div class="px-6 py-4 space-y-4">
             <div class="flex flex-col sm:flex-row">
-                <div class="font-semibold w-40 text-gray-700">Psychologue :</div>
+                <div class="font-semibold w-40 text-gray-700">Patient :</div>
                 <div class="text-gray-800">
-                    {{ $appointment->psychologist?->name ?? 'Non assigné' }}
+                    {{ $appointment->patient->name }}
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row">
+                <div class="font-semibold w-40 text-gray-700">Email :</div>
+                <div class="text-gray-800">
+                    {{ $appointment->patient->email }}
                 </div>
             </div>
 
@@ -39,17 +46,17 @@
             </div>
 
             @if($appointment->notes)
-            <div class="flex flex-col sm:flex-row">
-                <div class="font-semibold w-40 text-gray-700">Notes :</div>
-                <div class="text-gray-800">
-                    {{ $appointment->notes }}
+                <div class="flex flex-col sm:flex-row">
+                    <div class="font-semibold w-40 text-gray-700">Notes :</div>
+                    <div class="text-gray-800">
+                        {{ $appointment->notes }}
+                    </div>
                 </div>
-            </div>
             @endif
 
-            <!-- @if($appointment->status === 'pending')
-                <div class="pt-6 space-x-4">
-                    <form action="{{ route('psychologist.appointments.updateStatus', $appointment) }}" method="POST" class="inline">
+            @if($appointment->status === 'pending')
+                <div class="pt-6 flex space-x-4">
+                    <form action="{{ route('psychologist.appointments.updateStatus', $appointment) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status" value="confirmed">
@@ -59,7 +66,7 @@
                         </button>
                     </form>
 
-                    <form action="{{ route('psychologist.appointments.updateStatus', $appointment) }}" method="POST" class="inline"
+                    <form action="{{ route('psychologist.appointments.updateStatus', $appointment) }}" method="POST"
                           onsubmit="return confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')">
                         @csrf
                         @method('PUT')
@@ -70,8 +77,8 @@
                         </button>
                     </form>
                 </div>
-            @endif -->
+            @endif
         </div>
     </div>
 </div>
-@endsection
+@endsection 
