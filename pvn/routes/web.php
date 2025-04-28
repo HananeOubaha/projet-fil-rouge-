@@ -22,7 +22,7 @@ Route::get('/ressource', [ResourceController::class , 'index1']
 )->name('ressource');
 
 
-Route::get('/ressource/psy' , [ResourceController::class , 'index']);
+Route::get('/resources/index' , [ResourceController::class , 'index']);
 Route::get('/ressource/create' , function(){
     return view('psychologist.resources.create');
 });
