@@ -11,7 +11,8 @@ class ResourceController extends Controller
 {
     public function index()
     {
-        $resources = Resource::where('user_id', Auth::id())
+        $resources = Resource::with('psychologue')
+            ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 

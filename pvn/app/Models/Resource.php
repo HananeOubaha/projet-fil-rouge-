@@ -29,4 +29,8 @@ class Resource extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function psychologue(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 } 
