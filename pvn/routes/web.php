@@ -18,31 +18,22 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
-Route::get('/ressource', [ResourceController::class , 'index1']
-)->name('ressource');
-
-
-Route::get('/resources/index' , [ResourceController::class , 'index']);
-Route::get('/ressource/create' , function(){
-    return view('psychologist.resources.create');
-});
-Route::post('/ressource/create' , [ResourceController::class , 'store'])->name('psychologist.resources.index');
-
-
+// Routes des ressources
+Route::get('/ressource', [ResourceController::class, 'index1'])->name('ressource');
 Route::get('/ressource/{resource}', [ResourceController::class, 'show'])->name('ressource.show');
+Route::get('/resources/filter', [ResourceController::class, 'filter'])->name('resources.filter');
+Route::get('/resources/{resource}/download', [ResourceController::class, 'download'])->name('resources.download');
 
-Route::resource('resources', ResourceController::class)->names([
-    'index' => 'psychologist.resources.index',
-    'create' => 'psychologist.resources.create',
-    'store' => 'psychologist.resources.store',
-    'edit' => 'psychologist.resources.edit',
-    'update' => 'psychologist.resources.update',
-    'destroy' => 'psychologist.resources.destroy'
-]);
-
-Route::get('/resources/{resource}/download', [ResourceController::class, 'download'])
-     ->name('resources.download');
-
+Route::middleware(['auth'])->group(function () {
+    Route::resource('resources', ResourceController::class)->names([
+        'index' => 'psychologist.resources.index',
+        'create' => 'psychologist.resources.create',
+        'store' => 'psychologist.resources.store',
+        'edit' => 'psychologist.resources.edit',
+        'update' => 'psychologist.resources.update',
+        'destroy' => 'psychologist.resources.destroy'
+    ]);
+});
 Route::get('/login', function() {
     return view('signin');
 });

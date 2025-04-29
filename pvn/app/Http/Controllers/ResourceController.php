@@ -15,17 +15,14 @@ class ResourceController extends Controller
         $resources = Resource::with('psychologue')
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->paginate(10); // Ajout de la pagination
+            ->paginate(10);
 
         return view('psychologist.resources.index', compact('resources'));
     }
 
     public function index1()
     {
-        $resources = Resource::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10); // Ajout de la pagination
-        
+        $resources = Resource::with('user')->paginate(9); 
         return view('ressource', compact('resources'));
     }
 
@@ -66,9 +63,36 @@ class ResourceController extends Controller
         $resource = Resource::with('user')->findOrFail($id);
         $resource->increment('views');
         
-        return view('psychologist.resources.show', compact('resource'));
+        return view('resources.show', compact('resource'));
     }
 
+    public function filter(Request $request)
+    {
+        $query = Resource::query()->with('user');
+        
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%'.$request->search.'%')
+                  ->orWhere('description', 'like', '%'.$request->search.'%');
+            });
+        }
+        
+        if ($request->category) {
+            $query->whereJsonContains('categories', $request->category);
+        }
+        
+        if ($request->type) {
+            $query->where('type', $request->type);
+        }
+        
+        $resources = $query->orderBy('created_at', 'desc')
+                          ->paginate(9);
+
+        return response()->json([
+            'html' => view('partials.resources_list', ['resources' => $resources])->render(),
+            'hasMore' => $resources->hasMorePages()
+        ]);
+    }
     public function edit(Resource $resource)
     {
         if ($resource->user_id !== Auth::id()) {
