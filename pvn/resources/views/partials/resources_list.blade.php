@@ -2,17 +2,7 @@
     <a href="{{ route('ressource.show', $resource) }}" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
         @if($resource->file_path)
             <div class="h-48 overflow-hidden">
-                @if(in_array($resource->type, ['video', 'audio']))
-                    <div class="bg-gray-200 w-full h-full flex items-center justify-center">
-                        <i class="fas fa-play-circle text-5xl text-pvn-green opacity-70"></i>
-                    </div>
-                @elseif($resource->type === 'pdf')
-                    <div class="bg-gray-200 w-full h-full flex items-center justify-center">
-                        <i class="fas fa-file-pdf text-5xl text-pvn-green opacity-70"></i>
-                    </div>
-                @else
-                    <img src="{{ asset('storage/'.$resource->file_path) }}" alt="{{ $resource->title }}" class="w-full h-full object-cover">
-                @endif
+                <img src="{{ asset('storage/'.$resource->file_path) }}" alt="{{ $resource->title }}" class="w-full h-full object-cover">
             </div>
         @elseif($resource->url)
             <div class="h-48 overflow-hidden">
@@ -20,7 +10,8 @@
             </div>
         @else
             <div class="h-48 bg-gray-200 flex items-center justify-center">
-                <i class="fas fa-image text-5xl text-gray-400"></i>
+                <i class="fas fa-file-alt text-5xl text-gray-400"></i>
+                <span class="sr-only">Aucune image disponible</span>
             </div>
         @endif
         

@@ -63,7 +63,7 @@ class ResourceController extends Controller
         $resource = Resource::with('user')->findOrFail($id);
         $resource->increment('views');
         
-        return view('resources.show', compact('resource'));
+        return view('psychologist.resources.show', compact('resource'));
     }
 
     public function filter(Request $request)

@@ -68,8 +68,8 @@
         </div>
     </nav>
     
-      <!-- Main Content -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-pvn-dark-green mb-4">Ressources bien-être</h1>
