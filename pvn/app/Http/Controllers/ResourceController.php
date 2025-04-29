@@ -60,7 +60,13 @@ class ResourceController extends Controller
     return redirect()->route('psychologist.resources.index')
         ->with('success', 'Ressource ajoutée avec succès !');
 }
-
+public function show(Resource $resource)
+{
+    // Increment view count
+    $resource->increment('views');
+    
+    return view('psychologist.resources.show', compact('resource'));
+}
 
     public function edit(Resource $resource)
     {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PVN - Tableau de bord</title>
+    <title>PVN - Ressources</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -42,14 +42,6 @@
                     <a href="{{ route('appointments.create') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
                         <i class="fas fa-calendar-plus mr-2"></i>Réserver
                     </a>
-                    <!-- <div class="relative">
-                        <button id="user-menu-button" class="flex items-center text-pvn-dark-green hover:text-pvn-green">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                                alt="Photo de profil" 
-                                class="h-8 w-8 rounded-full">
-                            <span class="ml-2">Jean Dupont</span>
-                        </button>
-                    </div> -->
                 </div>
 
                 <div class="md:hidden">
@@ -74,6 +66,7 @@
             </div>
         </div>
     </nav>
+    
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
@@ -112,32 +105,67 @@
         <!-- Resources Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach($resources as $resource)
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <a href="{{ route('ressource.show', $resource) }}" class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
                     @if($resource->file_path)
-                        <img src="{{ asset('storage/'.$resource->file_path) }}" alt="{{ $resource->title }}" class="w-full h-48 object-cover">
+                        <div class="h-48 overflow-hidden">
+                            @if(in_array($resource->type, ['video', 'audio']))
+                                <div class="bg-gray-200 w-full h-full flex items-center justify-center">
+                                    <i class="fas fa-play-circle text-5xl text-pvn-green opacity-70"></i>
+                                </div>
+                            @elseif($resource->type === 'pdf')
+                                <div class="bg-gray-200 w-full h-full flex items-center justify-center">
+                                    <i class="fas fa-file-pdf text-5xl text-pvn-green opacity-70"></i>
+                                </div>
+                            @else
+                                <img src="{{ asset('storage/'.$resource->file_path) }}" alt="{{ $resource->title }}" class="w-full h-full object-cover">
+                            @endif
+                        </div>
                     @elseif($resource->url)
-                        <img src="{{ $resource->url }}" alt="{{ $resource->title }}" class="w-full h-48 object-cover">
+                        <div class="h-48 overflow-hidden">
+                            <img src="{{ $resource->url }}" alt="{{ $resource->title }}" class="w-full h-full object-cover">
+                        </div>
                     @else
-                        <img src="https://via.placeholder.com/1000x500" alt="Default Image" class="w-full h-48 object-cover">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-5xl text-gray-400"></i>
+                        </div>
                     @endif
+                    
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-2">
                             <span class="bg-pvn-light-beige text-pvn-dark-green px-3 py-1 rounded-full text-sm">{{ ucfirst($resource->type) }}</span>
                             <span class="text-gray-500 text-sm">{{ $resource->views }} vues</span>
                         </div>
-                        <h3 class="text-xl font-semibold text-pvn-dark-green mb-2">{{ $resource->title }}</h3>
-                        <p class="text-gray-600 mb-4">{{ $resource->user->name }}</p>
-                        <p class="text-gray-600 mb-4">{{ Str::limit($resource->description, 150) }}</p>
-                        {{-- <a href="{{ route('resources.show', $resource->id) }}" class="text-pvn-green hover:text-pvn-dark-green font-medium">Lire plus →</a> --}}
+                        <h3 class="text-xl font-semibold text-pvn-dark-green mb-2 line-clamp-2">{{ $resource->title }}</h3>
+                        <p class="text-gray-600 mb-2">{{ $resource->user->name }}</p>
+                        <p class="text-gray-600 mb-4 line-clamp-3">{{ $resource->description }}</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            @foreach($resource->categories as $category)
+                                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs">
+                                    {{ $category }}
+                                </span>
+                            @endforeach
+                        </div>
+                        <span class="inline-flex items-center text-pvn-green hover:text-pvn-dark-green font-medium">
+                            Voir plus <i class="fas fa-arrow-right ml-1 text-sm"></i>
+                        </span>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
 
         <!-- Load More Button -->
         <div class="text-center mt-8">
-            <button class="bg-pvn-green text-white px-8 py-3 rounded-md hover:bg-pvn-dark-green">
+            <button class="bg-pvn-green text-white px-8 py-3 rounded-md hover:bg-pvn-dark-green transition-colors">
                 Charger plus de ressources
             </button>
         </div>
     </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

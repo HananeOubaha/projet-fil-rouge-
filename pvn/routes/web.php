@@ -29,6 +29,7 @@ Route::get('/ressource/create' , function(){
 Route::post('/ressource/create' , [ResourceController::class , 'store'])->name('psychologist.resources.index');
 
 
+Route::get('/ressource/{resource}', [ResourceController::class, 'show'])->name('ressource.show');
 
 Route::get('/login', function() {
     return view('signin');
