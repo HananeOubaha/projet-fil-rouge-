@@ -31,6 +31,18 @@ Route::post('/ressource/create' , [ResourceController::class , 'store'])->name('
 
 Route::get('/ressource/{resource}', [ResourceController::class, 'show'])->name('ressource.show');
 
+Route::resource('resources', ResourceController::class)->names([
+    'index' => 'psychologist.resources.index',
+    'create' => 'psychologist.resources.create',
+    'store' => 'psychologist.resources.store',
+    'edit' => 'psychologist.resources.edit',
+    'update' => 'psychologist.resources.update',
+    'destroy' => 'psychologist.resources.destroy'
+]);
+
+Route::get('/resources/{resource}/download', [ResourceController::class, 'download'])
+     ->name('resources.download');
+
 Route::get('/login', function() {
     return view('signin');
 });

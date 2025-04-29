@@ -6,6 +6,7 @@ use App\Models\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ResourceController extends Controller
 {
@@ -14,18 +15,19 @@ class ResourceController extends Controller
         $resources = Resource::with('psychologue')
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10); // Ajout de la pagination
 
         return view('psychologist.resources.index', compact('resources'));
     }
-    public function index1()
-{
-    
-    $resources = Resource::all(); 
-    
-    return view('ressource', compact('resources'));
-}
 
+    public function index1()
+    {
+        $resources = Resource::with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); // Ajout de la pagination
+        
+        return view('ressource', compact('resources'));
+    }
 
     public function create()
     {
@@ -33,40 +35,39 @@ class ResourceController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'type' => 'required|string|in:article,video,audio,pdf,exercise',
-        'description' => 'required|string',
-        'categories' => 'required|array',
-        'categories.*' => 'string',
-        'file' => 'nullable|file|max:10240', // 10MB max
-        'url' => 'nullable|url',
-    ]);
-  
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'type' => 'required|string|in:article,video,audio,pdf,exercise',
+            'description' => 'required|string',
+            'categories' => 'required|array',
+            'categories.*' => 'string',
+            'file' => 'nullable|file|max:10240',
+            'url' => 'nullable|url',
+        ]);
 
+        if ($request->hasFile('file')) {
+            $validated['file_path'] = $request->file('file')->store('resources', 'public');
+        }
 
-    if ($request->hasFile('file')) {
-        $validated['file_path'] = $request->file('file')->store('resources', 'public');
+        $validated['user_id'] = Auth::id(); 
+        $validated['views'] = 0;
+        $validated['downloads'] = 0;
+        $validated['slug'] = Str::slug($request->title) . '-' . uniqid();
+
+        Resource::create($validated);
+
+        return redirect()->route('psychologist.resources.index')
+            ->with('success', 'Ressource ajoutée avec succès !');
     }
 
-
-    $validated['user_id'] = Auth::id(); 
-    $validated['views'] = 0;
-    $validated['downloads'] = 0;
-
-    Resource::create($validated);
-
-    return redirect()->route('psychologist.resources.index')
-        ->with('success', 'Ressource ajoutée avec succès !');
-}
-public function show(Resource $resource)
-{
-    // Increment view count
-    $resource->increment('views');
-    
-    return view('psychologist.resources.show', compact('resource'));
-}
+    public function show($id)
+    {
+        $resource = Resource::with('user')->findOrFail($id);
+        $resource->increment('views');
+        
+        return view('psychologist.resources.show', compact('resource'));
+    }
 
     public function edit(Resource $resource)
     {
@@ -85,7 +86,7 @@ public function show(Resource $resource)
                 ->with('error', 'Vous n\'êtes pas autorisé à modifier cette ressource.');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|string|in:article,video,audio,pdf,exercise',
             'description' => 'required|string',
@@ -95,25 +96,19 @@ public function show(Resource $resource)
             'url' => 'nullable|url'
         ]);
 
-        $resource->title = $request->title;
-        $resource->type = $request->type;
-        $resource->description = $request->description;
-        $resource->categories = $request->categories;
-
         if ($request->hasFile('file')) {
             // Delete old file if exists
             if ($resource->file_path) {
                 Storage::disk('public')->delete($resource->file_path);
             }
-            $path = $request->file('file')->store('resources', 'public');
-            $resource->file_path = $path;
+            $validated['file_path'] = $request->file('file')->store('resources', 'public');
         }
 
         if ($request->has('url')) {
-            $resource->url = $request->url;
+            $validated['url'] = $request->url;
         }
 
-        $resource->save();
+        $resource->update($validated);
 
         return redirect()->route('psychologist.resources.index')
             ->with('success', 'Ressource mise à jour avec succès !');
@@ -135,4 +130,18 @@ public function show(Resource $resource)
         return redirect()->route('psychologist.resources.index')
             ->with('success', 'Ressource supprimée avec succès !');
     }
-} 
+
+    public function download(Resource $resource)
+    {
+        if (!Storage::disk('public')->exists($resource->file_path)) {
+            return back()->with('error', 'Le fichier n\'existe pas.');
+        }
+
+        $resource->increment('downloads');
+        
+        return Storage::disk('public')->download(
+            $resource->file_path, 
+            Str::slug($resource->title) . '.' . pathinfo($resource->file_path, PATHINFO_EXTENSION)
+        );
+    }
+}
