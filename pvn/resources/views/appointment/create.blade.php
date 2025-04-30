@@ -1,4 +1,5 @@
-@extends('layout.navAuth')
+@extends('layout.navpatient')
+@section('title', 'reservation')
 
 @section('content')
 <div class="max-w-3xl mx-auto p-6">

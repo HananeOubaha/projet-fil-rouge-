@@ -43,8 +43,14 @@
                     <a href="{{ route('appointments.create') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
                         <i class="fas fa-calendar-plus mr-2"></i>Réserver
                     </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">
+                            Logout
+                        </button>
+                    </form>
                 </div>
-
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-pvn-dark-green hover:text-pvn-green">
                         <i class="fas fa-bars text-2xl"></i>

@@ -135,3 +135,6 @@
 </body>
 
 </html>
+<div> 
+    @yield('content')
+</div>
