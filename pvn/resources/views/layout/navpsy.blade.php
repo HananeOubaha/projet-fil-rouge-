@@ -51,6 +51,7 @@
                     <a href="/ressource/create"
                         class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">create
                         resource</a>
+                        <a href="#" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Profil</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
