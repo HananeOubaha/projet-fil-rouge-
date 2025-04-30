@@ -36,8 +36,8 @@ Route::middleware(['auth'])->group(function () {
         'destroy' => 'psychologist.resources.destroy'
     ]);
     Route::get('/ressource/create', [ResourceController::class, 'create'])->name('psychologist.resources.create');
+    Route::post('/ressource/store', [ResourceController::class, 'store'])->name('psychologist.resources.store');
     Route::get('/ressource/index', [ResourceController::class, 'index'])->name('psychologist.resources.index');
-    // Route::get('/ressource/show', [ResourceController::class, 'create'])->name('psychologist.resources.show');
     // Route::get('/ressource/edit', [ResourceController::class, 'create'])->name('psychologist.resources.edit');
 
 
