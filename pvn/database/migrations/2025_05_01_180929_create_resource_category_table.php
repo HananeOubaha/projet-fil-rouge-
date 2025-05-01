@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('resource_category', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('resource_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+            
+            $table->unique(['resource_id', 'category_id']);
         });
     }
 
