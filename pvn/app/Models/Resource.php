@@ -33,4 +33,17 @@ class Resource extends Model
     public function psychologue(){
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'resource_id'); 
+    }
+public function comments()
+{
+    return $this->hasMany(Comment::class)->latest();
+}
+
+public function isLikedBy(User $user)
+{
+    return $this->likes()->where('user_id', $user->id)->exists();
+}
 } 

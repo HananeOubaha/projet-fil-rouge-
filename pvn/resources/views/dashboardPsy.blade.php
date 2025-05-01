@@ -1,5 +1,5 @@
-@extends('layout.navpatient')
-@section('title', 'dashboard_patient')
+@extends('layout.navpsy')
+@section('title', 'create')
 
 @section('content')
 

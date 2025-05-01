@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PsychologistAppointmentController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\ResourceInteractionController;
 use App\Http\Middleware\CheckRole;
 
 //  Routes publiques
@@ -39,6 +40,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ressource/store', [ResourceController::class, 'store'])->name('psychologist.resources.store');
     Route::get('/ressource/index', [ResourceController::class, 'index'])->name('psychologist.resources.index');
     // Route::get('/ressource/edit', [ResourceController::class, 'create'])->name('psychologist.resources.edit');
+
+    Route::post('/resources/{resource}/like', [ResourceInteractionController::class, 'toggleLike'])
+    ->name('resources.like')
+    ->middleware('auth');
+
+    Route::post('/resources/{resource}/comment', [ResourceInteractionController::class, 'storeComment'])
+    ->name('resources.comment')
+    ->middleware('auth');
 
 
     // Dashboards selon le rôle

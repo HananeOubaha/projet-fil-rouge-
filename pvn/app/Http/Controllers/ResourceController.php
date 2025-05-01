@@ -60,7 +60,8 @@ class ResourceController extends Controller
 
     public function show($id)
     {
-        $resource = Resource::findOrFail($id);
+        $resource = Resource::with(['user', 'likes', 'comments.user'])
+            ->findOrFail($id);
         $resource->increment('views');
         
         return view('psychologist.resources.show', compact('resource'));

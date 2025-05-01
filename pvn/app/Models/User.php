@@ -61,4 +61,13 @@ class User extends Authenticatable
     {
         return $this->role === 'psychologue';
     }
+    public function likes()
+{
+    return $this->hasMany(Like::class);
+}
+
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
 }
