@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->timestamp('approved_at')->nullable();
+            if (!Schema::hasColumn('users', 'status')) {
+                $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            }
+            if (!Schema::hasColumn('users', 'approved_at')) {
+                $table->timestamp('approved_at')->nullable();
+            }
         });
     }
 
@@ -23,8 +27,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('status');
-            $table->dropColumn('approved_at');
+            if (Schema::hasColumn('users', 'status')) {
+                $table->dropColumn('status');
+            }
+            if (Schema::hasColumn('users', 'approved_at')) {
+                $table->dropColumn('approved_at');
+            }
         });
     }
 };

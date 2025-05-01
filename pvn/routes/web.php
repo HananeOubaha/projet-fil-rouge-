@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboardAdmin', [DashboardController::class, 'dashboardAdmin'])->name('dashboardAdmin');
     Route::get('/dashboardPsy', [DashboardController::class, 'dashboardPsy'])->name('dashboardPsy');
     Route::get('/dashboardUser', [DashboardController::class, 'dashboardUser'])->name('dashboardUser');
+    
 
     // Rendez-vous
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
@@ -96,3 +97,5 @@ Route::get('/booking', function () {
 Route::get('/ressource/{resource}', [ResourceController::class, 'show'])
     ->whereNumber('resource')
     ->name('ressource.show');
+    // Inclure les routes d'administration
+require __DIR__.'/admin.php';

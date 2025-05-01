@@ -29,14 +29,14 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('dashboardAdmin') }}" class="flex items-center">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center">
                         <i class="fas fa-heart text-pvn-green text-2xl mr-2"></i>
                         <span class="text-pvn-dark-green font-semibold text-xl">PVN Admin</span>
                     </a>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="{{ route('dashboardAdmin') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
+                    <a href="{{ route('admin.dashboard') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
                     <a href="{{ route('admin.psychologists') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Psychologues</a>
                     <a href="{{ route('admin.resources') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
                     <a href="{{ route('admin.categories') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Catégories</a>
@@ -59,7 +59,7 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="{{ route('dashboardAdmin') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Tableau de bord</a>
+                <a href="{{ route('admin.dashboard') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Tableau de bord</a>
                 <a href="{{ route('admin.psychologists') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Psychologues</a>
                 <a href="{{ route('admin.resources') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Ressources</a>
                 <a href="{{ route('admin.categories') }}" class="block text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-base font-medium">Catégories</a>
@@ -198,6 +198,13 @@
             </div>
         </div>
 
+        <!-- Platform Analytics -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-xl font-semibold text-pvn-dark-green mb-6">Évolution des utilisateurs</h2>
+            <canvas id="analyticsChart" class="w-full h-64"></canvas>
+        </div>
+    </div>
+
     <script>
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -207,6 +214,30 @@
             mobileMenu.classList.toggle('hidden');
         });
 
+        // Analytics Chart
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($user_growth['labels']) !!},
+                datasets: [{
+                    label: 'Utilisateurs inscrits',
+                    data: {!! json_encode($user_growth['data']) !!},
+                    borderColor: '#7C9A92',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
