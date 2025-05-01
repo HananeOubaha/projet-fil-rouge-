@@ -9,6 +9,7 @@ use App\Models\Resource;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Appointment;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -88,7 +89,83 @@ class DashboardController extends Controller
         if (Auth::user()->role !== 'psychologue') {
             return redirect()->route('dashboardUser')->with('error', 'Accès non autorisé.');
         }
-        return view('dashboardPsy');
+        
+        $psychologist = Auth::user();
+        
+        // Statistiques pour le tableau de bord
+        $stats = [
+            'total_consultations' => Appointment::where('doctor_id', $psychologist->id)
+                                    ->whereMonth('appointment_date', Carbon::now()->month)
+                                    ->count(),
+            'satisfaction_rate' => $this->calculateSatisfactionRate($psychologist->id),
+            'active_patients' => $this->getActivePatients($psychologist->id),
+            'unread_messages' => 0, // À implémenter selon votre système de messagerie
+        ];
+        
+        // Rendez-vous du jour
+        $today_appointments = Appointment::with('patient')
+                            ->where('doctor_id', $psychologist->id)
+                            ->whereDate('appointment_date', Carbon::today())
+                            ->orderBy('appointment_date')
+                            ->get();
+        
+        // Activité récente
+        $recent_activity = collect();
+        
+        // Nouveaux rendez-vous
+        $new_appointments = Appointment::with('patient')
+                            ->where('doctor_id', $psychologist->id)
+                            ->orderBy('created_at', 'desc')
+                            ->take(3)
+                            ->get()
+                            ->map(function ($appointment) {
+                                return [
+                                    'type' => 'appointment',
+                                    'message' => 'Nouveau rendez-vous avec ' . $appointment->patient->name,
+                                    'time' => $appointment->created_at,
+                                    'icon' => 'calendar-check'
+                                ];
+                            });
+        $recent_activity = $recent_activity->concat($new_appointments);
+        
+        // Nouveaux commentaires sur les ressources
+        $resource_ids = Resource::where('user_id', $psychologist->id)->pluck('id');
+        $new_comments = Comment::whereIn('resource_id', $resource_ids)
+                        ->orderBy('created_at', 'desc')
+                        ->take(3)
+                        ->get()
+                        ->map(function ($comment) {
+                            return [
+                                'type' => 'comment',
+                                'message' => 'Nouveau commentaire de ' . $comment->user->name,
+                                'time' => $comment->created_at,
+                                'icon' => 'comment'
+                            ];
+                        });
+        $recent_activity = $recent_activity->concat($new_comments);
+        
+        // Nouvelles ressources
+        $new_resources = Resource::where('user_id', $psychologist->id)
+                        ->orderBy('created_at', 'desc')
+                        ->take(3)
+                        ->get()
+                        ->map(function ($resource) {
+                            return [
+                                'type' => 'resource',
+                                'message' => 'Nouvelle ressource publiée: ' . $resource->title,
+                                'time' => $resource->created_at,
+                                'icon' => 'file-alt'
+                            ];
+                        });
+        $recent_activity = $recent_activity->concat($new_resources);
+        
+        // Trier par date
+        $recent_activity = $recent_activity->sortByDesc('time')->take(5);
+        
+        // Données pour le graphique de progrès
+        $progress_data = $this->getProgressData($psychologist->id);
+        
+        return view('dashboardPsy', compact('stats', 'today_appointments', 'recent_activity', 'progress_data', 'psychologist'));
     }
 
     public function dashboardUser()
@@ -123,6 +200,49 @@ class DashboardController extends Controller
         return [
             'labels' => $months,
             'data' => $counts
+        ];
+    }
+    
+    private function calculateSatisfactionRate($doctor_id)
+    {
+        // À implémenter selon votre système d'évaluation
+        // Exemple simple: moyenne des évaluations (1-5)
+        return 4.8;
+    }
+    
+    private function getActivePatients($doctor_id)
+    {
+        // Patients avec au moins un rendez-vous dans les 3 derniers mois
+        $threeMonthsAgo = Carbon::now()->subMonths(3);
+        
+        $activePatientIds = Appointment::where('doctor_id', $doctor_id)
+                            ->where('appointment_date', '>=', $threeMonthsAgo)
+                            ->pluck('patient_id')
+                            ->unique()
+                            ->count();
+        
+        return $activePatientIds;
+    }
+    
+    private function getProgressData($doctor_id)
+    {
+        $months = collect();
+        $satisfaction = collect();
+
+        // Données des 6 derniers mois
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $month = $date->format('M');
+            $months->push($month);
+            
+            // À remplacer par votre logique d'évaluation réelle
+            $rating = 4.0 + (mt_rand(0, 10) / 10);
+            $satisfaction->push(round($rating, 1));
+        }
+
+        return [
+            'labels' => $months,
+            'data' => $satisfaction
         ];
     }
 }

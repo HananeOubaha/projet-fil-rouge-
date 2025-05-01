@@ -43,15 +43,14 @@
                     <a href="/psychologist/appointments"
                         class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Mes
                         Rendez-vous</a>
-                    <a href="/psychologist-patients"
-                        class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Patients</a>
+                    {{-- <a href="/psychologist-patients"
+                        class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Patients</a> --}}
                     <a href="/ressource/index"
                         class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">mes
                         ressources</a>
                     <a href="/ressource/create"
                         class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">create
                         resource</a>
-                        <a href="#" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Profil</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
@@ -59,14 +58,14 @@
                             Logout
                         </button>
                     </form>
-                    <div class="relative">
+                    {{-- <div class="relative">
                         <button id="user-menu-button"
                             class="flex items-center text-pvn-dark-green hover:text-pvn-green">
                             <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                 alt="Photo de profil" class="h-8 w-8 rounded-full">
                             <span class="ml-2">Dr. Lambert</span>
                         </button>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="md:hidden">
