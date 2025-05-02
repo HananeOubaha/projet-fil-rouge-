@@ -15,7 +15,7 @@
                     <a href="{{ route('appointments.create') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green text-center">
                         <i class="fas fa-calendar-plus mr-2"></i>Prendre rendez-vous
                     </a>
-                    <a href="{{ route('quiz') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green text-center">
+                    <a href="{{ route('quiz.index') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green text-center">
                         <i class="fas fa-clipboard-list mr-2"></i>Commencer un quiz bien-être
                     </a>
                 </div>
@@ -75,7 +75,7 @@
                     <i class="fas fa-clipboard-check text-pvn-green text-xl"></i>
                 </div>
                 <p class="text-gray-600 mb-4">Évaluez votre bien-être mental et recevez des recommandations personnalisées.</p>
-                <a href="{{ route('quiz') }}" class="block bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green text-center">
+                <a href="{{ route('quiz.index') }}" class="block bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green text-center">
                     Commencer un quiz
                 </a>
             </div>

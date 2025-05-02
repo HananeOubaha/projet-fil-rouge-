@@ -11,6 +11,7 @@ use App\Http\Controllers\ResourceInteractionController;
 use App\Http\Controllers\AnonymousForumController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\CheckRole;
+use App\Http\Controllers\QuizController;
 
 //  Routes publiques
 Route::get('/', function () {
@@ -114,3 +115,6 @@ require __DIR__.'/admin.php';
 Route::get('/ressource/{resource}', [ResourceController::class, 'show'])
     ->whereNumber('resource')
     ->name('ressource.show');
+    Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
+Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
+Route::get('/quiz/results/{id}', [QuizController::class, 'show'])->name('quiz.results');
