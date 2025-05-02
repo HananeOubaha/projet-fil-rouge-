@@ -44,40 +44,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Dernière humeur -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-semibold text-pvn-dark-green">Votre humeur</h2>
-                    <i class="fas fa-smile text-pvn-green text-xl"></i>
-                </div>
-                <canvas id="moodChart" class="w-full h-32"></canvas>
-                <button class="mt-4 text-pvn-green hover:text-pvn-dark-green font-medium">
-                    Voir l'historique complet →
-                </button>
-            </div>
-
-            <!-- Messages non lus -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-semibold text-pvn-dark-green">Messages non lus</h2>
-                    <i class="fas fa-envelope text-pvn-green text-xl"></i>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                             alt="Dr. Lambert" 
-                             class="h-10 w-10 rounded-full">
-                        <div>
-                            <p class="font-medium text-gray-800">Dr. Marie Lambert</p>
-                            <p class="text-sm text-gray-600">À propos de votre dernier...</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('message') }}" class="text-pvn-green hover:text-pvn-dark-green font-medium">
-                        Voir tous les messages →
-                    </a>
-                </div>
-            </div>
         </div>
 
         <!-- Resources and Activities -->
