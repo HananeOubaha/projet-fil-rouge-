@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('anonymous_comments', function (Blueprint $table) {
             $table->id();
+            $table->text('content');
+            $table->foreignId('anonymous_post_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_psychologist')->default(false);
             $table->timestamps();
         });
     }

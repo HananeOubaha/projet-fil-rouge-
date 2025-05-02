@@ -177,7 +177,28 @@ class DashboardController extends Controller
                 return redirect()->route('dashboardPsy');
             }
         }
-        return view('dashboardUser');
+        
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        
+        // Récupérer le prochain rendez-vous
+        $upcomingAppointment = Appointment::where('patient_id', $user->id)
+            ->where('appointment_date', '>', now())
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('appointment_date', 'asc')
+            ->with('psychologist')
+            ->first();
+        
+        // Récupérer les ressources recommandées
+        $recommendedResources = Resource::where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->take(2)
+            ->get();
+        
+        // Récupérer les activités récentes
+        $recentActivities = $this->getUserRecentActivities($user->id);
+        
+        return view('dashboardUser', compact('user', 'upcomingAppointment', 'recommendedResources', 'recentActivities'));
     }
 
     private function getUserGrowthData()
@@ -244,5 +265,62 @@ class DashboardController extends Controller
             'labels' => $months,
             'data' => $satisfaction
         ];
+    }
+    
+    private function getUserRecentActivities($userId)
+    {
+        $activities = collect();
+        
+        // Récupérer les rendez-vous récents
+        $appointments = Appointment::where('patient_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->take(2)
+            ->get()
+            ->map(function ($appointment) {
+                return [
+                    'type' => 'appointment',
+                    'message' => 'Rendez-vous ' . $appointment->status . ' avec ' . 
+                                ($appointment->psychologist ? $appointment->psychologist->name : 'un psychologue'),
+                    'time' => $appointment->created_at,
+                    'icon' => 'calendar'
+                ];
+            });
+        
+        // Récupérer les commentaires récents
+        $comments = Comment::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->take(2)
+            ->get()
+            ->map(function ($comment) {
+                return [
+                    'type' => 'comment',
+                    'message' => 'Commentaire sur une ressource',
+                    'time' => $comment->created_at,
+                    'icon' => 'comment'
+                ];
+            });
+        
+        // Récupérer les likes récents
+        $likes = Like::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->take(2)
+            ->get()
+            ->map(function ($like) {
+                return [
+                    'type' => 'like',
+                    'message' => 'Ressource aimée',
+                    'time' => $like->created_at,
+                    'icon' => 'heart'
+                ];
+            });
+        
+        // Combiner et trier les activités
+        $activities = $activities->concat($appointments)
+                                ->concat($comments)
+                                ->concat($likes)
+                                ->sortByDesc('time')
+                                ->take(3);
+        
+        return $activities;
     }
 }

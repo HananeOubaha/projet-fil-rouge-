@@ -8,6 +8,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PsychologistAppointmentController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\ResourceInteractionController;
+use App\Http\Controllers\AnonymousForumController;
 use App\Http\Middleware\CheckRole;
 
 //  Routes publiques
@@ -55,6 +56,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboardPsy', [DashboardController::class, 'dashboardPsy'])->name('dashboardPsy');
     Route::get('/dashboardUser', [DashboardController::class, 'dashboardUser'])->name('dashboardUser');
     
+    // Forum anonyme
+    Route::get('/forum-anonyme', [AnonymousForumController::class, 'index'])->name('anonymous.forum');
+    Route::post('/forum-anonyme', [AnonymousForumController::class, 'store'])->name('anonymous.forum.store');
+    Route::post('/forum-anonyme/{post}/comment', [AnonymousForumController::class, 'storeComment'])->name('anonymous.forum.comment');
+    Route::post('/forum-anonyme/{post}/support', [AnonymousForumController::class, 'support'])->name('anonymous.forum.support');
 
     // Rendez-vous
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
@@ -69,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/psychologist/appointments/{appointment}/status', [PsychologistAppointmentController::class, 'updateStatus'])->name('psychologist.appointments.updateStatus');
 });
 
-//  Routes d’authentification
+//  Routes d'authentification
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -81,10 +87,6 @@ Route::get('/quiz', function () {
     return view('quiz');
 })->name('quiz');
 
-Route::get('/AnonymousForm', function () {
-    return view('AnonymousForm');
-});
-
 Route::get('/message', function () {
     return view('message');
 })->name('message');
@@ -93,9 +95,10 @@ Route::get('/booking', function () {
     return view('booking.psychologists');
 });
 
-//  route dynamique pour l’affichage d’une ressource (doit venir en dernier)
+// Inclure les routes d'administration
+require __DIR__.'/admin.php';
+
+//  route dynamique pour l'affichage d'une ressource (doit venir en dernier)
 Route::get('/ressource/{resource}', [ResourceController::class, 'show'])
     ->whereNumber('resource')
     ->name('ressource.show');
-    // Inclure les routes d'administration
-require __DIR__.'/admin.php';

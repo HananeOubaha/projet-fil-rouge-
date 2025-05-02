@@ -1,6 +1,5 @@
-
 @extends('layout.navpatient')
-@section('title', 'dashboard')
+@section('title', 'Forum Anonyme')
 
 @section('content')
     <!-- Main Content -->
@@ -19,16 +18,19 @@
         <!-- New Post Form -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h2 class="text-xl font-semibold text-pvn-dark-green mb-4">Partagez votre message</h2>
-            <form>
+            <form action="{{ route('anonymous.forum.store') }}" method="POST">
+                @csrf
                 <textarea
+                    name="content"
                     class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pvn-green"
                     rows="4"
                     placeholder="Exprimez-vous librement..."
+                    required
                 ></textarea>
                 <div class="flex justify-between items-center mt-4">
                     <div class="flex items-center space-x-4">
                         <label class="flex items-center">
-                            <input type="checkbox" class="form-checkbox text-pvn-green">
+                            <input type="checkbox" name="notify_email" class="form-checkbox text-pvn-green">
                             <span class="ml-2 text-gray-700">Recevoir des réponses par email</span>
                         </label>
                     </div>
@@ -41,80 +43,76 @@
 
         <!-- Messages Feed -->
         <div class="space-y-6">
-            <!-- Message 1 -->
+            @forelse($posts as $post)
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div>
                         <span class="bg-pvn-light-beige text-pvn-dark-green px-3 py-1 rounded-full text-sm">Anonyme</span>
-                        <span class="text-gray-500 text-sm ml-2">Il y a 1 heure</span>
+                        <span class="text-gray-500 text-sm ml-2">{{ $post->created_at->diffForHumans() }}</span>
                     </div>
                     <button class="text-gray-400 hover:text-gray-600">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
                 </div>
                 <p class="text-gray-700 mb-4">
-                    Parfois, je me sens submergé(e) par mes responsabilités professionnelles et personnelles. 
-                    J'ai l'impression de ne pas pouvoir tout gérer...
+                    {{ $post->content }}
                 </p>
                 <div class="flex items-center space-x-4 mb-4">
-                    <button class="flex items-center space-x-2 text-pvn-green hover:text-pvn-dark-green">
+                    <button class="flex items-center space-x-2 text-pvn-green hover:text-pvn-dark-green support-button" data-post-id="{{ $post->id }}">
                         <i class="fas fa-heart"></i>
-                        <span>24 soutiens</span>
+                        <span class="support-count">{{ $post->support_count }}</span> soutiens
                     </button>
-                    <button class="flex items-center space-x-2 text-pvn-green hover:text-pvn-dark-green">
+                    <button class="flex items-center space-x-2 text-pvn-green hover:text-pvn-dark-green toggle-comments" data-post-id="{{ $post->id }}">
                         <i class="fas fa-comment"></i>
-                        <span>12 réponses</span>
+                        <span>{{ $post->comments->count() }} réponses</span>
                     </button>
                 </div>
+                
                 <!-- Responses -->
-                <div class="space-y-4 mt-6">
+                <div class="space-y-4 mt-6 comments-section" id="comments-{{ $post->id }}" style="display: none;">
+                    @foreach($post->comments as $comment)
                     <div class="bg-pvn-light-beige p-4 rounded-lg">
                         <div class="flex items-center mb-2">
-                            <span class="font-medium text-pvn-dark-green">Dr. Marie L.</span>
+                            @if($comment->is_psychologist)
+                            <span class="font-medium text-pvn-dark-green">Dr. {{ $comment->user->name }}</span>
                             <span class="ml-2 text-sm text-pvn-green">Psychologue certifié</span>
+                            @else
+                            <span class="font-medium text-pvn-dark-green">Anonyme</span>
+                            @endif
                         </div>
                         <p class="text-gray-700">
-                            Il est normal de se sentir dépassé(e) parfois. Avez-vous essayé de faire une liste 
-                            de priorités ? Cela peut aider à mieux organiser vos tâches et réduire le stress.
+                            {{ $comment->content }}
                         </p>
                     </div>
+                    @endforeach
+                    
+                    <!-- Comment Form -->
+                    <form action="{{ route('anonymous.forum.comment', $post->id) }}" method="POST" class="mt-4">
+                        @csrf
+                        <div class="flex space-x-2">
+                            <input type="text" name="content" placeholder="Ajouter une réponse..." required
+                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-  required
+                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green">
+                            <button type="submit" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
+                                Répondre
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <!-- Message 2 -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <span class="bg-pvn-light-beige text-pvn-dark-green px-3 py-1 rounded-full text-sm">Anonyme</span>
-                        <span class="text-gray-500 text-sm ml-2">Il y a 3 heures</span>
-                    </div>
-                    <button class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
-                </div>
-                <p class="text-gray-700 mb-4">
-                    Je viens de commencer une nouvelle thérapie et je me sens enfin écouté(e). 
-                    C'est incroyable comme ça fait du bien de pouvoir parler librement.
-                </p>
-                <div class="flex items-center space-x-4">
-                    <button class="flex items-center space-x-2 text-pvn-green hover:text-pvn-dark-green">
-                        <i class="fas fa-heart"></i>
-                        <span>42 soutiens</span>
-                    </button>
-                    <button class="flex items-center space-x-2 text-pvn-green hover:text-pvn-dark-green">
-                        <i class="fas fa-comment"></i>
-                        <span>8 réponses</span>
-                    </button>
-                </div>
+            @empty
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <p class="text-gray-600">Aucun message pour le moment. Soyez le premier à partager vos pensées !</p>
             </div>
+            @endforelse
         </div>
 
         <!-- Load More Button -->
+        @if($posts->hasPages())
         <div class="text-center mt-8">
-            <button class="bg-pvn-green text-white px-8 py-3 rounded-md hover:bg-pvn-dark-green">
-                Voir plus de messages
-            </button>
+            {{ $posts->links() }}
         </div>
+        @endif
     </div>
 
     <!-- Guidelines Sidebar (Fixed) -->
@@ -145,10 +143,44 @@
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Toggle comments
+        document.querySelectorAll('.toggle-comments').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = this.getAttribute('data-post-id');
+                const commentsSection = document.getElementById('comments-' + postId);
+                if (commentsSection) {
+                    commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Support button
+        document.querySelectorAll('.support-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = this.getAttribute('data-post-id');
+                fetch(`/forum-anonyme/${postId}/support`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const countElement = this.querySelector('.support-count');
+                    if (countElement) {
+                        countElement.textContent = data.support_count;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
         });
     </script>
-</body>
-</html>
 @endsection
