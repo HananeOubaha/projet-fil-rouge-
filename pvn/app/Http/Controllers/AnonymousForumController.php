@@ -13,6 +13,7 @@ class AnonymousForumController extends Controller
     public function index()
     {
         $posts = AnonymousPost::with('comments')
+            ->where('is_hidden', false)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
             
@@ -25,6 +26,11 @@ class AnonymousForumController extends Controller
             'content' => 'required|string|max:1000',
             'notify_email' => 'boolean'
         ]);
+        
+        // Vérifier si le contenu est inapproprié
+        if ($this->containsInappropriateContent($request->content)) {
+            return redirect()->back()->with('error', 'Votre message contient du contenu inapproprié.');
+        }
         
         $post = new AnonymousPost();
         $post->content = $request->content;
@@ -41,6 +47,11 @@ class AnonymousForumController extends Controller
         $request->validate([
             'content' => 'required|string|max:500',
         ]);
+        
+        // Vérifier si le contenu est inapproprié
+        if ($this->containsInappropriateContent($request->content)) {
+            return redirect()->back()->with('error', 'Votre commentaire contient du contenu inapproprié.');
+        }
         
         $post = AnonymousPost::findOrFail($postId);
         
@@ -61,5 +72,25 @@ class AnonymousForumController extends Controller
         $post->save();
         
         return response()->json(['support_count' => $post->support_count]);
+    }
+    
+    // Méthode pour vérifier si le contenu est inapproprié
+    private function containsInappropriateContent($content)
+    {
+        $bannedWords = [
+            'insulte', 'connard', 'connasse', 'pute', 'salope', 'enculé', 
+            'fdp', 'merde', 'putain', 'con', 'conne', 'bâtard', 
+            'nique', 'niquer', 'encule', 'bite', 'couille'
+        ];
+        
+        $content = strtolower($content);
+        
+        foreach ($bannedWords as $word) {
+            if (stripos($content, $word) !== false) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Appointment;
+use App\Models\Report;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -30,6 +31,7 @@ class DashboardController extends Controller
             'total_categories' => Category::count(),
             'total_comments' => Comment::count(),
             'total_likes' => Like::count(),
+            'pending_reports' => Report::where('status', 'pending')->count(),
         ];
 
         // Activité récente
@@ -67,6 +69,17 @@ class DashboardController extends Controller
             ];
         });
         $recent_activity = $recent_activity->concat($new_comments);
+
+        // Nouveaux signalements
+        $new_reports = Report::orderBy('created_at', 'desc')->take(3)->get()->map(function ($report) {
+            return [
+                'type' => 'report',
+                'message' => 'Nouveau signalement: ' . ucfirst($report->reason),
+                'time' => $report->created_at,
+                'icon' => 'flag'
+            ];
+        });
+        $recent_activity = $recent_activity->concat($new_reports);
 
         // Trier par date
         $recent_activity = $recent_activity->sortByDesc('time')->take(5);
