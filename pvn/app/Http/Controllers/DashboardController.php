@@ -91,10 +91,17 @@ class DashboardController extends Controller
                                     ->take(5)
                                     ->get();
 
+        // Récupérer les signalements récents pour le tableau
+        $recent_reports = Report::with(['post', 'comment', 'user'])
+                            ->where('status', 'pending')
+                            ->orderBy('created_at', 'desc')
+                            ->take(5)
+                            ->get();
+
         // Données pour le graphique
         $user_growth = $this->getUserGrowthData();
 
-        return view('dashboardAdmin', compact('stats', 'recent_activity', 'pending_psychologists', 'user_growth'));
+        return view('dashboardAdmin', compact('stats', 'recent_activity', 'pending_psychologists', 'user_growth', 'recent_reports'));
     }
 
     public function dashboardPsy()

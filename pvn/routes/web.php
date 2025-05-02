@@ -66,8 +66,9 @@ Route::middleware(['auth'])->group(function () {
     // Système de signalement
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
     
-    // Routes d'administration des signalements
-    Route::middleware(['role:admin'])->group(function () {
+    // Routes d'administration des signalements - CORRIGÉ
+    // Utiliser le middleware directement sans alias
+    Route::middleware([CheckRole::class . ':admin'])->group(function () {
         Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports.index');
         Route::get('/admin/reports/{report}', [ReportController::class, 'show'])->name('admin.reports.show');
         Route::put('/admin/reports/{report}', [ReportController::class, 'update'])->name('admin.reports.update');
