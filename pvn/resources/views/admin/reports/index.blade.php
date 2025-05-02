@@ -1,4 +1,4 @@
-@extends('layout.navpatient')
+@extends('layout.navAdmin')
 @section('title', 'Gestion des Signalements')
 
 @section('content')
