@@ -50,9 +50,14 @@
                         <span class="bg-pvn-light-beige text-pvn-dark-green px-3 py-1 rounded-full text-sm">Anonyme</span>
                         <span class="text-gray-500 text-sm ml-2">{{ $post->created_at->diffForHumans() }}</span>
                     </div>
-                    <button class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </button>
+                    <div class="flex space-x-2">
+                        <button class="text-gray-400 hover:text-gray-600 report-button" data-type="post" data-id="{{ $post->id }}">
+                            <i class="fas fa-flag"></i>
+                        </button>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
                 </div>
                 <p class="text-gray-700 mb-4">
                     {{ $post->content }}
@@ -71,19 +76,26 @@
                 <!-- Responses -->
                 <div class="space-y-4 mt-6 comments-section" id="comments-{{ $post->id }}" style="display: none;">
                     @foreach($post->comments as $comment)
+                    @if(!$comment->is_hidden)
                     <div class="bg-pvn-light-beige p-4 rounded-lg">
-                        <div class="flex items-center mb-2">
-                            @if($comment->is_psychologist)
-                            <span class="font-medium text-pvn-dark-green">Dr. {{ $comment->user->name }}</span>
-                            <span class="ml-2 text-sm text-pvn-green">Psychologue certifié</span>
-                            @else
-                            <span class="font-medium text-pvn-dark-green">Anonyme</span>
-                            @endif
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                @if($comment->is_psychologist)
+                                <span class="font-medium text-pvn-dark-green">Dr. {{ $comment->user->name }}</span>
+                                <span class="ml-2 text-sm text-pvn-green">Psychologue certifié</span>
+                                @else
+                                <span class="font-medium text-pvn-dark-green">Anonyme</span>
+                                @endif
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600 report-button" data-type="comment" data-id="{{ $comment->id }}">
+                                <i class="fas fa-flag"></i>
+                            </button>
                         </div>
                         <p class="text-gray-700">
                             {{ $comment->content }}
                         </p>
                     </div>
+                    @endif
                     @endforeach
                     
                     <!-- Comment Form -->
@@ -91,7 +103,6 @@
                         @csrf
                         <div class="flex space-x-2">
                             <input type="text" name="content" placeholder="Ajouter une réponse..." required
-                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-  required
                                    class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green">
                             <button type="submit" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
                                 Répondre
@@ -138,6 +149,36 @@
         </ul>
     </div>
 
+    <!-- Report Modal -->
+    <div id="report-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Signaler ce contenu</h3>
+            <form id="report-form">
+                @csrf
+                <input type="hidden" id="reportable-type" name="reportable_type" value="">
+                <input type="hidden" id="reportable-id" name="reportable_id" value="">
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Raison du signalement</label>
+                    <select name="reason" id="report-reason" class="w-full p-2 border rounded">
+                        <option value="harassment">Harcèlement</option>
+                        <option value="hate_speech">Discours haineux</option>
+                        <option value="inappropriate">Contenu inapproprié</option>
+                        <option value="other">Autre</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Détails (optionnel)</label>
+                    <textarea name="details" id="report-details" rows="3" class="w-full p-2 border rounded"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="cancel-report" class="px-4 py-2 bg-gray-200 rounded">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Signaler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -181,6 +222,55 @@
                 })
                 .catch(error => console.error('Error:', error));
             });
+        });
+
+        // Report functionality
+        const reportModal = document.getElementById('report-modal');
+        const reportForm = document.getElementById('report-form');
+        const reportableType = document.getElementById('reportable-type');
+        const reportableId = document.getElementById('reportable-id');
+        const cancelReport = document.getElementById('cancel-report');
+
+        // Open report modal
+        document.querySelectorAll('.report-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                const id = this.getAttribute('data-id');
+                
+                reportableType.value = type;
+                reportableId.value = id;
+                reportModal.classList.remove('hidden');
+            });
+        });
+
+        // Close report modal
+        cancelReport.addEventListener('click', function() {
+            reportModal.classList.add('hidden');
+        });
+
+        // Submit report
+        reportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(reportForm);
+            
+            fetch('{{ route("report.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    reportModal.classList.add('hidden');
+                    alert(data.message);
+                    reportForm.reset();
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
     </script>
 @endsection
