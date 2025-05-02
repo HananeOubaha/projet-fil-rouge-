@@ -72,16 +72,15 @@
                         <label class="block mb-4 text-sm font-semibold text-gray-700">Catégories</label>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             @php
-                                $categories = ['Stress', 'Anxiété', 'Dépression', 'Méditation', 'Sommeil', 'Bien-être'];
                                 $oldCategories = old('categories', []);
                             @endphp
 
                             @foreach ($categories as $category)
                                 <label class="flex items-center space-x-2">
-                                    <input type="checkbox" name="categories[]" value="{{ $category }}"
-                                        {{ in_array($category, $oldCategories) ? 'checked' : '' }}
+                                    <input type="checkbox" name="categories[]" value="{{ $category->nom }}"
+                                        {{ in_array($category->nom, $oldCategories) ? 'checked' : '' }}
                                         class="text-pvn-green-500 rounded focus:ring-pvn-green-300">
-                                    <span class="text-gray-700">{{ $category }}</span>
+                                    <span class="text-gray-700">{{ $category->nom }}</span>
                                 </label>
                             @endforeach
                         </div>

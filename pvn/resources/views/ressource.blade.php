@@ -93,12 +93,9 @@
                 <div>
                     <select id="category-filter" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green">
                         <option value="">Toutes les catégories</option>
-                        <option value="meditation">Méditation</option>
-                        <option value="stress">Gestion du stress</option>
-                        <option value="sleep">Sommeil</option>
-                        <option value="anxiety">Anxiété</option>
-                        <option value="depression">Dépression</option>
-                        <option value="relationships">Relations</option>
+                        @foreach(App\Models\Category::orderBy('nom')->get() as $category)
+                            <option value="{{ $category->nom }}">{{ $category->nom }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div>

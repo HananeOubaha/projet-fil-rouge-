@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resource;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -26,9 +27,14 @@ class ResourceController extends Controller
         return view('ressource', compact('resources'));
     }
 
+    // public function create()
+    // {
+    //     return view('psychologist.resources.create');
+    // }
     public function create()
     {
-        return view('psychologist.resources.create');
+        $categories = Category::orderBy('nom')->get();
+        return view('psychologist.resources.create', compact('categories'));
     }
 
     public function store(Request $request)
