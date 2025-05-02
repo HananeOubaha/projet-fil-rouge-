@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('anonymous_posts_and_comments', function (Blueprint $table) {
-            //
+        Schema::table('anonymous_posts', function (Blueprint $table) {
+            $table->boolean('is_hidden')->default(false);
+        });
+
+        Schema::table('anonymous_comments', function (Blueprint $table) {
+            $table->boolean('is_hidden')->default(false);
         });
     }
 
@@ -21,8 +25,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('anonymous_posts_and_comments', function (Blueprint $table) {
-            //
+        Schema::table('anonymous_posts', function (Blueprint $table) {
+            $table->dropColumn('is_hidden');
+        });
+
+        Schema::table('anonymous_comments', function (Blueprint $table) {
+            $table->dropColumn('is_hidden');
         });
     }
 };
