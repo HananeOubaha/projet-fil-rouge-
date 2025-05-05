@@ -63,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
     // Interactions sur les ressources
     Route::post('/resources/{resource}/like', [ResourceInteractionController::class, 'toggleLike'])->name('resources.like');
     Route::post('/resources/{resource}/comment', [ResourceInteractionController::class, 'storeComment'])->name('resources.comment');
-
+ Route::delete('/comments/{comment}', [ResourceInteractionController::class, 'deleteComment'])->name('comments.delete');
     // Dashboards par rôle
     Route::get('/dashboardAdmin', [DashboardController::class, 'dashboardAdmin'])->name('dashboardAdmin');
     Route::get('/dashboardPsy', [DashboardController::class, 'dashboardPsy'])->name('dashboardPsy');

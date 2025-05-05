@@ -6,8 +6,6 @@
     <title>{{ $resource->title }} | PVN</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Ajouter Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         .video-container {
             position: relative;
@@ -41,24 +39,19 @@
         .button-download:hover {
             background-color: #3E5553;
         }
-        #like-button:hover #like-icon {
-    color: #7C9A92;
-}
-
-#comments-list {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.comment-enter {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-.comment-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 300ms ease-out;
-}
+        .like-button:hover .like-icon {
+            color: #7C9A92;
+        }
+        #comments-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .delete-icon {
+            transition: color 0.2s ease;
+        }
+        .delete-icon:hover {
+            color: #e53e3e;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -101,14 +94,6 @@
                             Logout
                         </button>
                     </form>
-                    <!-- <div class="relative">
-                        <button id="user-menu-button" class="flex items-center text-pvn-dark-green hover:text-pvn-green">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                                alt="Photo de profil" 
-                                class="h-8 w-8 rounded-full">
-                            <span class="ml-2">Jean Dupont</span>
-                        </button>
-                    </div> -->
                 </div>
 
                 <div class="md:hidden">
@@ -140,7 +125,22 @@
             </div>
         </div>
     </nav>
+    
     <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Affichage des messages de succès -->
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Affichage des messages d'erreur -->
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="bg-white rounded-lg shadow-xl overflow-hidden">
             <!-- En-tête -->
             <div class="resource-header p-6">
@@ -201,34 +201,42 @@
                     @endif
                 </div>
             </div>
+            
             <!-- Likes and Comments Section -->
             <div class="mt-8 border-t border-gray-200 pt-6">
                 <!-- Like Button -->
                 <div class="flex items-center space-x-4 mb-6">
-                    <button id="like-button" 
-                            class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors"
-                            data-resource-id="{{ $resource->id }}"
-                            data-liked="{{ $resource->isLikedBy(auth()->user()) ? 'true' : 'false' }}">
-                        <i class="far fa-heart text-2xl {{ $resource->isLikedBy(auth()->user()) ? 'hidden' : '' }}" id="like-icon"></i>
-                        <i class="fas fa-heart text-2xl text-pvn-green {{ $resource->isLikedBy(auth()->user()) ? '' : 'hidden' }}" id="liked-icon"></i>
-                        <span id="likes-count">{{ $resource->likes->count() }}</span>
-                    </button>
+                    <!-- Formulaire de like -->
+                    <form action="{{ route('resources.like', $resource) }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors">
+                            @if($resource->isLikedBy(auth()->user()))
+                                <i class="fas fa-heart text-2xl text-pvn-green"></i>
+                            @else
+                                <i class="far fa-heart text-2xl"></i>
+                            @endif
+                            <span>{{ $resource->likes->count() }}</span>
+                        </button>
+                    </form>
                     
-                    <button id="toggle-comments" class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors">
+                    <a href="#comments" class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors">
                         <i class="far fa-comment text-2xl"></i>
-                        <span id="comments-count">{{ $resource->comments->count() }}</span>
-                    </button>
+                        <span>{{ $resource->comments->count() }}</span>
+                    </a>
                 </div>
 
-                <!-- Comments Section (Initially Hidden) -->
-                <div id="comments-section" class="hidden">
+                <!-- Comments Section -->
+                <div id="comments" class="mt-6">
+                    <h3 class="text-xl font-semibold text-pvn-dark-green mb-4">Commentaires</h3>
+                    
                     <!-- Comment Form -->
                     @auth
                     <div class="mb-6">
-                        <form id="comment-form" class="flex space-x-2">
+                        <!-- Formulaire de commentaire -->
+                        <form action="{{ route('resources.comment', $resource) }}" method="POST" class="flex space-x-2">
                             @csrf
                             <input type="text" name="content" placeholder="Ajouter un commentaire..." 
-                                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green">
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green" required>
                             <button type="submit" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
                                 Publier
                             </button>
@@ -245,6 +253,17 @@
                                         <p class="font-medium text-pvn-dark-green">{{ $comment->user->name }}</p>
                                         <p class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
                                     </div>
+                                    
+                                    <!-- Bouton de suppression (visible uniquement pour l'auteur du commentaire) -->
+                                    @if(auth()->check() && auth()->id() === $comment->user_id)
+                                        <form action="{{ route('comments.delete', $comment) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-gray-500 hover:text-red-600 transition-colors delete-icon" title="Supprimer ce commentaire">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                                 <p class="mt-2 text-gray-700">{{ $comment->content }}</p>
                             </div>
@@ -252,6 +271,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Pied de page -->
             <div class="p-6 bg-gray-50 border-t border-gray-200">
                 <div class="flex justify-between items-center">
@@ -272,88 +292,12 @@
             </div>
         </div>
     </div>
+    
     <script>
-        // Configuration d'Axios pour inclure le token CSRF dans toutes les requêtes
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
-                                                       document.querySelector('input[name="_token"]')?.value;
-
         // Mobile menu toggle
         document.getElementById('mobile-menu-button')?.addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
-
-        // Like functionality
-        document.getElementById('like-button').addEventListener('click', function() {
-            const resourceId = this.getAttribute('data-resource-id');
-            const isLiked = this.getAttribute('data-liked') === 'true';
-            
-            axios.post(`/resources/${resourceId}/like`)
-                .then(response => {
-                    document.getElementById('likes-count').textContent = response.data.likes_count;
-                    
-                    if (response.data.liked) {
-                        document.getElementById('like-icon').classList.add('hidden');
-                        document.getElementById('liked-icon').classList.remove('hidden');
-                        this.setAttribute('data-liked', 'true');
-                    } else {
-                        document.getElementById('like-icon').classList.remove('hidden');
-                        document.getElementById('liked-icon').classList.add('hidden');
-                        this.setAttribute('data-liked', 'false');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    if (error.response && error.response.status === 401) {
-                        window.location.href = '/login';
-                    }
-                });
-        });
-    
-        // Toggle comments
-        document.getElementById('toggle-comments').addEventListener('click', function() {
-            const commentsSection = document.getElementById('comments-section');
-            commentsSection.classList.toggle('hidden');
-        });
-    
-        // Submit comment
-        const commentForm = document.getElementById('comment-form');
-        if (commentForm) {
-            commentForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const resourceId = document.getElementById('like-button').getAttribute('data-resource-id');
-                const formData = new FormData(this);
-                
-                axios.post(`/resources/${resourceId}/comment`, formData)
-                    .then(response => {
-                        // Add new comment to the list
-                        const commentsList = document.getElementById('comments-list');
-                        const newComment = document.createElement('div');
-                        newComment.className = 'bg-pvn-light-beige p-4 rounded-lg';
-                        newComment.innerHTML = `
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <p class="font-medium text-pvn-dark-green">${response.data.comment.user.name}</p>
-                                    <p class="text-sm text-gray-500">${response.data.comment.created_at}</p>
-                                </div>
-                            </div>
-                            <p class="mt-2 text-gray-700">${response.data.comment.content}</p>
-                        `;
-                        commentsList.prepend(newComment);
-                        
-                        // Update comments count
-                        document.getElementById('comments-count').textContent = response.data.comments_count;
-                        
-                        // Clear the input
-                        this.reset();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        if (error.response && error.response.status === 401) {
-                            window.location.href = '/login';
-                        }
-                    });
-            });
-        }
     </script>
 </body>
 </html>
