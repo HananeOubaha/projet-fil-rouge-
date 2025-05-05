@@ -282,11 +282,6 @@
                         <span class="text-gray-500 text-sm">
                             <i class="fas fa-eye mr-1"></i> {{ $resource->views }} vues
                         </span>
-                        @if($resource->file_path)
-                            <a href="{{ asset('storage/'.$resource->file_path) }}" download class="bg-pvn-green text-white px-4 py-2 rounded-md button-download">
-                                <i class="fas fa-download mr-2"></i> Télécharger
-                            </a>
-                        @endif
                     </div>
                 </div>
             </div>
