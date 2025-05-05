@@ -31,9 +31,6 @@
                     <select name="type" id="type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pvn-green focus:ring focus:ring-pvn-green focus:ring-opacity-50" required>
                         <option value="article" {{ old('type', $resource->type) == 'article' ? 'selected' : '' }}>Article</option>
                         <option value="video" {{ old('type', $resource->type) == 'video' ? 'selected' : '' }}>Vidéo</option>
-                        <option value="audio" {{ old('type', $resource->type) == 'audio' ? 'selected' : '' }}>Audio</option>
-                        <option value="pdf" {{ old('type', $resource->type) == 'pdf' ? 'selected' : '' }}>PDF</option>
-                        <option value="exercise" {{ old('type', $resource->type) == 'exercise' ? 'selected' : '' }}>Exercice</option>
                     </select>
                     @error('type')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -91,15 +88,6 @@
                     @endif
                 </div>
 
-                <!-- URL -->
-                <div>
-                    <label for="url" class="block text-sm font-medium text-gray-700">URL</label>
-                    <input type="url" name="url" id="url" value="{{ old('url', $resource->url) }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pvn-green focus:ring focus:ring-pvn-green focus:ring-opacity-50">
-                    @error('url')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
             </div>
 
             <div class="mt-6 flex justify-end space-x-4">

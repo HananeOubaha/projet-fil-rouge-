@@ -91,11 +91,9 @@
                     <a href="{{ route('dashboardUser') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Tableau de bord</a>
                     <a href="{{ route('appointments.index') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Rendez-vous</a>
                     <a href="{{ route('ressource') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Ressources</a>
-                    <a href="{{ route('message') }}" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Messages</a>
                     <a href="{{ route('appointments.create') }}" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
                         <i class="fas fa-calendar-plus mr-2"></i>Réserver
                     </a>
-                    <a href="#" class="text-pvn-dark-green hover:text-pvn-green px-3 py-2 rounded-md text-sm font-medium">Profil</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
@@ -203,57 +201,57 @@
                     @endif
                 </div>
             </div>
-<!-- Likes and Comments Section -->
-<div class="mt-8 border-t border-gray-200 pt-6">
-    <!-- Like Button -->
-    <div class="flex items-center space-x-4 mb-6">
-        <button id="like-button" 
-                class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors"
-                data-resource-id="{{ $resource->id }}"
-                data-liked="{{ $resource->isLikedBy(auth()->user()) ? 'true' : 'false' }}">
-            <i class="far fa-heart text-2xl {{ $resource->isLikedBy(auth()->user()) ? 'hidden' : '' }}" id="like-icon"></i>
-            <i class="fas fa-heart text-2xl text-pvn-green {{ $resource->isLikedBy(auth()->user()) ? '' : 'hidden' }}" id="liked-icon"></i>
-            <span id="likes-count">{{ $resource->likes->count() }}</span>
-        </button>
-        
-        <button id="toggle-comments" class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors">
-            <i class="far fa-comment text-2xl"></i>
-            <span id="comments-count">{{ $resource->comments->count() }}</span>
-        </button>
-    </div>
-
-    <!-- Comments Section (Initially Hidden) -->
-    <div id="comments-section" class="hidden">
-        <!-- Comment Form -->
-        @auth
-        <div class="mb-6">
-            <form id="comment-form" class="flex space-x-2">
-                @csrf
-                <input type="text" name="content" placeholder="Ajouter un commentaire..." 
-                       class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green">
-                <button type="submit" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
-                    Publier
-                </button>
-            </form>
-        </div>
-        @endauth
-
-        <!-- Comments List -->
-        <div id="comments-list" class="space-y-4">
-            @foreach($resource->comments as $comment)
-                <div class="bg-pvn-light-beige p-4 rounded-lg">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-medium text-pvn-dark-green">{{ $comment->user->name }}</p>
-                            <p class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
-                        </div>
-                    </div>
-                    <p class="mt-2 text-gray-700">{{ $comment->content }}</p>
+            <!-- Likes and Comments Section -->
+            <div class="mt-8 border-t border-gray-200 pt-6">
+                <!-- Like Button -->
+                <div class="flex items-center space-x-4 mb-6">
+                    <button id="like-button" 
+                            class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors"
+                            data-resource-id="{{ $resource->id }}"
+                            data-liked="{{ $resource->isLikedBy(auth()->user()) ? 'true' : 'false' }}">
+                        <i class="far fa-heart text-2xl {{ $resource->isLikedBy(auth()->user()) ? 'hidden' : '' }}" id="like-icon"></i>
+                        <i class="fas fa-heart text-2xl text-pvn-green {{ $resource->isLikedBy(auth()->user()) ? '' : 'hidden' }}" id="liked-icon"></i>
+                        <span id="likes-count">{{ $resource->likes->count() }}</span>
+                    </button>
+                    
+                    <button id="toggle-comments" class="flex items-center space-x-1 text-gray-600 hover:text-pvn-green transition-colors">
+                        <i class="far fa-comment text-2xl"></i>
+                        <span id="comments-count">{{ $resource->comments->count() }}</span>
+                    </button>
                 </div>
-            @endforeach
-        </div>
-    </div>
-</div>
+
+                <!-- Comments Section (Initially Hidden) -->
+                <div id="comments-section" class="hidden">
+                    <!-- Comment Form -->
+                    @auth
+                    <div class="mb-6">
+                        <form id="comment-form" class="flex space-x-2">
+                            @csrf
+                            <input type="text" name="content" placeholder="Ajouter un commentaire..." 
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pvn-green">
+                            <button type="submit" class="bg-pvn-green text-white px-4 py-2 rounded-md hover:bg-pvn-dark-green">
+                                Publier
+                            </button>
+                        </form>
+                    </div>
+                    @endauth
+
+                    <!-- Comments List -->
+                    <div id="comments-list" class="space-y-4">
+                        @foreach($resource->comments as $comment)
+                            <div class="bg-pvn-light-beige p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-medium text-pvn-dark-green">{{ $comment->user->name }}</p>
+                                        <p class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
+                                    </div>
+                                </div>
+                                <p class="mt-2 text-gray-700">{{ $comment->content }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
             <!-- Pied de page -->
             <div class="p-6 bg-gray-50 border-t border-gray-200">
                 <div class="flex justify-between items-center">

@@ -46,15 +46,6 @@
                 <p class="text-gray-600">En suivi régulier</p>
             </div>
 
-            <!-- Messages non lus -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-xl font-semibold text-pvn-dark-green">Messages</h2>
-                    <i class="fas fa-envelope text-pvn-green text-xl"></i>
-                </div>
-                <p class="text-3xl font-bold text-pvn-dark-green">{{ $stats['unread_messages'] }}</p>
-                <p class="text-gray-600">Non lus</p>
-            </div>
         </div>
 
         <!-- Appointments and Activity -->

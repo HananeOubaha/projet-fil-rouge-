@@ -49,7 +49,7 @@
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pvn-green-300 focus:outline-none"
                                 required>
                                 <option value="">Sélectionner un type</option>
-                                @foreach (['article', 'video', 'audio', 'pdf', 'exercise'] as $type)
+                                @foreach (['article', 'video'] as $type)
                                     <option value="{{ $type }}" {{ old('type') == $type ? 'selected' : '' }}>
                                         {{ ucfirst($type) }}
                                     </option>
@@ -86,19 +86,11 @@
                         </div>
                     </div>
 
-                    {{-- File or URL --}}
+                    {{-- Fichier --}}
                     <div>
-                        <label class="block mb-2 text-sm font-semibold text-gray-700">Fichier ou URL</label>
-                        <div class="space-y-4">
-                            <input type="file" name="file"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pvn-green-300 focus:outline-none">
-                            <div class="flex items-center gap-4">
-                                <span class="text-gray-400">ou</span>
-                                <input type="url" name="url" value="{{ old('url') }}"
-                                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pvn-green-300 focus:outline-none"
-                                    placeholder="URL de la ressource">
-                            </div>
-                        </div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">Fichier</label>
+                        <input type="file" name="file"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pvn-green-300 focus:outline-none" required>
                     </div>
 
                     {{-- Buttons --}}

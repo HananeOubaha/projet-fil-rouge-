@@ -9,6 +9,7 @@
         </div>
 
         <div class="p-6 bg-pvn-light-beige rounded-b-lg">
+            
             <form method="POST" action="{{ route('appointments.store') }}">
                 @csrf
 
