@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-                <h3 class="text-xl font-semibold mb-4">À propos de PVN</h3>
+                <h3 class="text-xl font-semibold mb-4">À propos de Phosphenes</h3>
                 <p class="text-gray-300">Votre plateforme de bien-être mental et de soutien psychologique.</p>
             </div>
             <div>
