@@ -12,6 +12,7 @@ use App\Http\Controllers\AnonymousForumController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\QuizController;
 use App\Http\Middleware\CheckRole;
+use App\Http\Controllers\ContactController;
 
 // -------------------
 // Routes publiques
@@ -21,7 +22,13 @@ Route::view('/', 'index')->name('index');
 Route::view('/about', 'about')->name('about');
 Route::view('/message', 'message')->name('message');
 Route::view('/booking', 'booking.psychologists');
+// Nouvelle route pour la page contact
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 
+// Route pour soumettre le formulaire de contact
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 // Authentification
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);

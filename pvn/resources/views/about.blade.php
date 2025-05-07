@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PVN - À propos</title>
+    <title>Phosphenes - À propos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -275,7 +275,7 @@
                 <div>
                     <div class="flex items-center mb-4">
                         <i class="fas fa-heart text-pvn-green text-2xl mr-2"></i>
-                        <h3 class="text-xl font-semibold">PVN</h3>
+                        <h3 class="text-xl font-semibold"></h3>
                     </div>
                     <p class="text-gray-300 mb-4">Votre plateforme de bien-être mental et de soutien psychologique.</p>
                     <div class="flex space-x-4">
@@ -316,15 +316,15 @@
                     <ul class="space-y-2">
                         <li class="flex items-start">
                             <i class="fas fa-map-marker-alt mt-1 mr-3 text-pvn-green"></i>
-                            <span>123 Rue du Bien-être, 75000 Paris, France</span>
+                            <span>Had soualem .Maroc</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-3 text-pvn-green"></i>
-                            <a href="mailto:contact@pvn.com" class="hover:underline">contact@pvn.com</a>
+                            <a href="mailto:contact@pvn.com" class="hover:underline">hananem140@gmail.com</a>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-phone mr-3 text-pvn-green"></i>
-                            <span>+33 1 23 45 67 89</span>
+                            <span>0632333724</span>
                         </li>
                     </ul>
                 </div>
@@ -342,25 +342,6 @@
 
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
-        });
-
-        // Scroll reveal animation
-        document.addEventListener('DOMContentLoaded', function() {
-            const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
-                    }
-                });
-            }, {
-                threshold: 0.1
-            });
-            
-            scrollRevealElements.forEach(element => {
-                observer.observe(element);
-            });
         });
     </script>
 </body>
