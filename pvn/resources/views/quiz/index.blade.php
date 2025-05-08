@@ -19,8 +19,8 @@
                 </ul>
             </div>
             
-            <form action="{{ route('quiz.store') }}" method="POST">
-                @csrf
+            <form >
+               
                 
                 <div class="space-y-8">
                     <!-- Section Dépression -->

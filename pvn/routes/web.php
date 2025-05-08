@@ -105,8 +105,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/psychologist/appointments/{appointment}/status', [PsychologistAppointmentController::class, 'updateStatus'])->name('psychologist.appointments.updateStatus');
 
     // Quiz (store + résultats)
-    Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
-    Route::get('/quiz/results/{id}', [QuizController::class, 'show'])->name('quiz.results');
+    // Route::post('/quiz', [QuizController::class, 'store'])->name('quiz.store');
+    // Route::get('/quiz/results/{id}', [QuizController::class, 'show'])->name('quiz.results');
 
     // Vue détaillée d'une ressource
     Route::get('/ressource/{resource}', [ResourceController::class, 'show'])->whereNumber('resource')->name('ressource.show');
