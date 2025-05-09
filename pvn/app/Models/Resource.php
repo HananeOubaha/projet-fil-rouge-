@@ -13,7 +13,6 @@ class Resource extends Model
         'title',
         'type',
         'description',
-        'categories',
         'file_path',
         'url',
         'user_id',
@@ -21,9 +20,10 @@ class Resource extends Model
         'downloads',
     ];
 
-    protected $casts = [
-        'categories' => 'array'
-    ];
+    // Supprimez ce cast car la colonne n'existe plus
+    // protected $casts = [
+    //     'categories' => 'array'
+    // ];
 
     public function user()
     {
@@ -33,17 +33,24 @@ class Resource extends Model
     public function psychologue(){
         return $this->belongsTo(User::class, 'user_id');
     }
+    
     public function likes()
     {
         return $this->hasMany(Like::class, 'resource_id'); 
     }
-public function comments()
-{
-    return $this->hasMany(Comment::class)->latest();
-}
+    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 
-public function isLikedBy(User $user)
-{
-    return $this->likes()->where('user_id', $user->id)->exists();
+    public function isLikedBy(User $user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'resource_category', 'resource_id', 'category_id');
+    }
 }
-} 

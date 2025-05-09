@@ -26,7 +26,7 @@
                         {{ session('error') }}
                     </div>
                 @endif
-
+                
                 @if($resources->isEmpty())
                     <div class="text-center py-8">
                         <p class="text-lg font-medium text-gray-600">Vous n'avez pas encore ajouté de ressources.</p>
@@ -50,6 +50,7 @@
                             </thead>
                             <tbody class="divide-y divide-gray-200">
                                 @foreach($resources as $resource)
+                                
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-4 py-2">
                                             <div class="font-medium text-gray-800">{{ $resource->title }}</div>
@@ -69,11 +70,15 @@
                                         </td>
                                         <td class="px-4 py-2">
                                             <div class="flex flex-wrap gap-1">
-                                                @foreach($resource->categories as $category)
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pvn-green-100 text-pvn-green-800">
-                                                        {{ $category }}
-                                                    </span>
-                                                @endforeach
+                                                @if($resource->categories->count() > 0)
+                                                    @foreach($resource->categories as $category)
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pvn-green-100 text-pvn-green-800">
+                                                            {{ $category->nom }}
+                                                        </span>
+                                                    @endforeach
+                                                @else
+                                                    <p>Aucune catégorie</p>
+                                                @endif
                                             </div>
                                         </td>
                                         <td class="px-4 py-2">
@@ -118,13 +123,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
-                    <!-- Pagination -->
-                    @if($resources->hasPages())
-                        <div class="mt-6">
-                            {{ $resources->links() }}
-                        </div>
-                    @endif
+                
                 @endif
             </div>
         </div>

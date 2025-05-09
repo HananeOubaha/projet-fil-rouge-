@@ -31,6 +31,9 @@
                     <select name="type" id="type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pvn-green focus:ring focus:ring-pvn-green focus:ring-opacity-50" required>
                         <option value="article" {{ old('type', $resource->type) == 'article' ? 'selected' : '' }}>Article</option>
                         <option value="video" {{ old('type', $resource->type) == 'video' ? 'selected' : '' }}>Vidéo</option>
+                        <option value="audio" {{ old('type', $resource->type) == 'audio' ? 'selected' : '' }}>Audio</option>
+                        <option value="pdf" {{ old('type', $resource->type) == 'pdf' ? 'selected' : '' }}>PDF</option>
+                        <option value="exercise" {{ old('type', $resource->type) == 'exercise' ? 'selected' : '' }}>Exercice</option>
                     </select>
                     @error('type')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -55,13 +58,15 @@
                         @php
                             // Récupérer les catégories directement si elles ne sont pas fournies
                             $categoriesList = isset($categories) ? $categories : \App\Models\Category::orderBy('nom')->get();
+                            // Récupérer les IDs des catégories déjà associées à cette ressource
+                            $resourceCategoryIds = $resource->categories->pluck('id')->toArray();
                         @endphp
                         
                         @foreach($categoriesList as $category)
                             <div class="flex items-center">
-                                <input id="category-{{ $category->id }}" name="categories[]" type="checkbox" value="{{ $category->nom }}"
+                                <input id="category-{{ $category->id }}" name="categories[]" type="checkbox" value="{{ $category->id }}"
                                        class="rounded border-gray-300 text-pvn-green shadow-sm focus:border-pvn-green focus:ring focus:ring-pvn-green focus:ring-opacity-50"
-                                       {{ in_array($category->nom, old('categories', $resource->categories ?? [])) ? 'checked' : '' }}>
+                                       {{ in_array($category->id, old('categories', $resourceCategoryIds)) ? 'checked' : '' }}>
                                 <label for="category-{{ $category->id }}" class="ml-2 text-sm text-gray-700">
                                     {{ $category->nom }}
                                 </label>
@@ -88,6 +93,15 @@
                     @endif
                 </div>
 
+                <!-- URL -->
+                <div>
+                    <label for="url" class="block text-sm font-medium text-gray-700">URL</label>
+                    <input type="url" name="url" id="url" value="{{ old('url', $resource->url) }}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pvn-green focus:ring focus:ring-pvn-green focus:ring-opacity-50">
+                    @error('url')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <div class="mt-6 flex justify-end space-x-4">

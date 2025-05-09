@@ -187,18 +187,18 @@
                 <div class="prose max-w-none">
                     <h2 class="text-xl font-semibold text-pvn-dark-green mb-4">Description</h2>
                     <p class="text-gray-700 whitespace-pre-wrap">{{ $resource->description }}</p>
-                    @if($resource->categories)
-                        <div class="mt-8">
-                            <h3 class="text-lg font-semibold text-pvn-dark-green mb-2">Catégories</h3>
-                            <div class="flex flex-wrap gap-2">
-                                @foreach($resource->categories as $category)
-                                    <span class="bg-pvn-light-beige text-pvn-dark-green px-3 py-1 rounded-full text-sm">
-                                        {{ $category }}
-                                    </span>
-                                @endforeach
-                            </div>
+                    @if($resource->categories->count() > 0)
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-pvn-dark-green mb-2">Catégories</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($resource->categories as $category)
+                                <span class="bg-pvn-light-beige text-pvn-dark-green px-3 py-1 rounded-full text-sm">
+                                    {{ $category->nom }}
+                                </span>
+                            @endforeach
                         </div>
-                    @endif
+                    </div>
+                @endif
                 </div>
             </div>
             

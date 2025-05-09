@@ -26,7 +26,7 @@
             <div class="flex flex-wrap gap-2 mb-3">
                 @foreach($resource->categories as $category)
                     <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs">
-                        {{ $category }}
+                        {{ $category->nom }}
                     </span>
                 @endforeach
             </div>

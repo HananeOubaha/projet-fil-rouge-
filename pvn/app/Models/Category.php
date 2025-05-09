@@ -13,6 +13,6 @@ class Category extends Model
 
     public function resources()
     {
-        return $this->belongsToMany(Resource::class, 'resource_category');
+        return $this->belongsToMany(Resource::class, 'resource_category', 'category_id', 'resource_id');
     }
 }
